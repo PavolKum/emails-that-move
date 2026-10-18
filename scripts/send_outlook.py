@@ -2,9 +2,9 @@
 Send an HTML email to YOURSELF through classic Outlook (COM), with local images embedded as CID attachments.
 This is the real-world test: open the received message in classic Outlook, new Outlook, OWA and your phone.
 
-    python send_outlook.py out/emails/pulse.html             # dry run: shows what would be sent
-    python send_outlook.py out/emails/pulse.html --send      # sends to your own mailbox
-    python send_outlook.py out/emails/pulse.html --send --subject "Pulse test 3"
+    python send_outlook.py out/emails/roast.html             # dry run: shows what would be sent
+    python send_outlook.py out/emails/roast.html --send      # sends to your own mailbox
+    python send_outlook.py out/emails/roast.html --send --subject "Roast test 3"
 
 Self-only by design. Forward from Outlook if it should go anywhere else.
 

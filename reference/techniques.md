@@ -58,7 +58,7 @@ Note `angle="90"` renders color2 on the left: flip the colours if needed.
 - **Charts** - text bars (`card_bar`) and monospace sparklines. Images need HTTPS URLs; Outlook proxies them.
 - **Version** - declare `1.2` (ToggleVisibility, ActionSet, RichTextBlock, fallback). Give newer elements a `fallback`.
 - **Logic** - string `targetElements` toggle (XOR), `{elementId, isVisible}` assigns, nesting is AND: visibility composes down the tree. A goal check is a chain of wrappers around a banner, each wrapper visible while its condition holds (Lights Out: 25 deep, plus a 5-deep chain per floor). If moves commute and undo themselves, each move can also toggle its own hint marker and the hint stays a valid solution from any position. Conditional moves (a state machine) work the same way: put each move button inside the wrappers of the states where it applies. The cost is bytes: every move lists all its targets, and a restart must assign every element explicitly (most of Lights Out's 46 KB). Verified in the AC JS 3.0.6 lab only (Oct 2026).
-- **Size** - keep the payload compact (Pulse ~26 KB, Lights Out ~46 KB). No documented Outlook limit found (Oct 2026); `lights_out.py` also writes a 19 KB lite control so a real-inbox test can tell a size limit from a feature gap. Drop defaults (`isVisible: true`, `wrap: false`, Column `type`) to save bytes.
+- **Size** - keep the payload compact (Roast Report ~27 KB, Lights Out ~46 KB). No documented Outlook limit found (Oct 2026); `lights_out.py` also writes a 19 KB lite control so a real-inbox test can tell a size limit from a feature gap. Drop defaults (`isVisible: true`, `wrap: false`, Column `type`) to save bytes.
 
 ## GIF design rules
 

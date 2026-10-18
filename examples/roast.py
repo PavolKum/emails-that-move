@@ -1,6 +1,6 @@
 """
-Roast Report - a weekly KPI email for a small coffee roastery: the same anatomy as pulse.py (two donuts and a
-headline number, an index line chart, a heatmap, a watchlist, an Adaptive Card) on a subject anyone can read.
+Roast Report - a weekly KPI email for a small coffee roastery: two donuts and a headline number, an index line
+chart, a heatmap, a watchlist and an Adaptive Card, on a subject anyone can read.
 All data is fictional.
 
     python roast.py --theme mybrand --out C:/temp/roast/emails

@@ -10,8 +10,8 @@ Note: Word's PDF export is static - animated GIFs show their first frame (that i
 Outlook 2013-2019 shows too; Outlook for Microsoft 365 animates them).
 
 Usage:
-    python render_classic.py emails/pulse.html              -> emails/pulse.classic.png
-    python render_classic.py emails/pulse.html out.png --width 680 --scale 2
+    python render_classic.py emails/roast.html              -> emails/roast.classic.png
+    python render_classic.py emails/roast.html out.png --width 680 --scale 2
 """
 import argparse
 import pathlib

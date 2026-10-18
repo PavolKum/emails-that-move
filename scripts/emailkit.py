@@ -9,10 +9,10 @@ Typical email script:
 
     import emailkit as ek
     ek.use_theme("mybrand")                    # assets/themes/local/mybrand.json, then assets/themes/mybrand.json
-    chart = ek.LineChart(series={"Office": [...], "Retail": [...]}, x_labels={0: "Oct", 11: "Sep"},
+    chart = ek.LineChart(series={"Ethiopia": [...], "Brazil": [...]}, x_labels={0: "Oct", 11: "Sep"},
                          y_ticks=[95, 100, 105])
     rows = ek.section_title("Market", "Price index") + ek.row(ek.line_chart_block(chart, img_dir, "price"))
-    html = ek.email_document("Weekly pulse", ek.header_band(...) + rows, card=ek.adaptive_card(body=[...]))
+    html = ek.email_document("Weekly report", ek.header_band(...) + rows, card=ek.adaptive_card(body=[...]))
 
 Every chart block takes `classic=` and `modern=` so you choose, per chart, what each renderer gets:
 VML (crisp, static) or GIF (animated in M365 desktop, frame 1 elsewhere) for classic; GIF or PNG for modern.

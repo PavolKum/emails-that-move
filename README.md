@@ -1,9 +1,9 @@
-# Outlook Email Kit
+# Emails that move
 
-**Emails that move.** Animated charts, vector graphics and scenes that breathe, all inside the Outlook inbox, the
+The Outlook Email Kit. Animated charts, vector graphics and scenes that breathe, all inside the Outlook inbox, the
 strictest canvas in office software. There is no JavaScript in the emails.
 
-**See it working:** https://pavolkum.github.io/outlook-email-kit/ (both emails in a simulated Outlook window, plus a replay of how the kit was built)
+**See it working:** https://pavolkum.github.io/emails-that-move/ (both emails in a simulated Outlook window, plus a replay of how the kit was built)
 
 ![A line chart of three coffee prices drawing itself](docs/img/price-index.gif)
 
@@ -58,7 +58,7 @@ Python 3.10 or newer. The lab works offline.
 The repo is a Claude Code skill. Clone it into your skills folder and ask for an email:
 
 ```bash
-git clone https://github.com/PavolKum/outlook-email-kit ~/.claude/skills/outlook-email
+git clone https://github.com/PavolKum/emails-that-move ~/.claude/skills/outlook-email
 ```
 
 `SKILL.md` tells Claude how the kit works: which renderer gets what, the rules that bit us, and the workflow.
@@ -85,8 +85,9 @@ git clone https://github.com/PavolKum/outlook-email-kit ~/.claude/skills/outlook
 
 ## How it was built
 
-In one Claude Code conversation on a Saturday: 11 prompts, all spoken in voice mode. The landing page in `docs/`
-shows both emails in a simulated Outlook window and replays that conversation, prompt by prompt.
+The kit came out of one Claude Code conversation on a Saturday: 11 prompts, all spoken in voice mode. The coffee
+roastery demo, the ambient loop and the landing page followed the next morning. The landing page in `docs/` shows
+both emails in a simulated Outlook window and replays those 11 prompts, one by one.
 
 ## License
 
