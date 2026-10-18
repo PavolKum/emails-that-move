@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Outlook Lab</title>
+<style>
+  :root {
+    --ink: #0D0D0F; --gold: #FFC21A; --pink: #FF2E7E;
+    --paper: #f3f3f1; --rule: #0D0D0F; --muted: #6b6a66; --pane: #ffffff;
+    --mono: ui-monospace, Consolas, Menlo, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 14px/1.45 system-ui, "Segoe UI", sans-serif; }
+  header { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; padding: 14px 16px; background: var(--ink); color: #fff; border-bottom: 4px solid var(--gold); }
+  header h1 { margin: 0; font: 800 15px/1 var(--mono); letter-spacing: 3px; color: var(--gold); }
+  header p { margin: 0; color: #b9b8b2; font-size: 12px; flex: 1 1 320px; }
+  header select, header button, header label.btn { font: 600 13px var(--mono); background: #fff; color: var(--ink); border: 2px solid #fff; padding: 6px 10px; cursor: pointer; }
+  header label.btn { background: transparent; color: #fff; }
+  header input[type=file] { display: none; }
+  main { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 16px; padding: 16px; align-items: start; }
+  .pane { background: var(--pane); border: 2px solid var(--rule); min-width: 0; }
+  .pane > h2 { margin: 0; padding: 10px 12px; font: 800 12px/1.2 var(--mono); letter-spacing: 1.5px; text-transform: uppercase; border-bottom: 2px solid var(--rule); display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+  .pane > h2 small { font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--muted); }
+  .pane .tag { display: inline-block; padding: 1px 6px; font: 700 10px var(--mono); letter-spacing: 1px; border: 1.5px solid var(--ink); }
+  .tag.real { background: var(--gold); }
+  .tag.approx { background: #fff; }
+  .stage { background: #e9e9e6; overflow: hidden; }
+  .stage img { display: block; width: 100%; height: auto; }
+  .zoomwrap { width: 680px; transform-origin: top left; }
+  .stage iframe { display: block; width: 680px; border: 0; background: #f3f3f1; }
+  .cardstage { padding: 16px; background: #f5f5f5; }
+  .cardhost { max-width: 560px; margin: 0 auto; background: #fff; border: 1px solid #e1dfdd; border-radius: 6px; padding: 16px; box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+  .log { margin: 0; border-top: 2px solid var(--rule); font: 12px/1.5 var(--mono); }
+  .log summary { padding: 8px 12px; cursor: pointer; font-weight: 700; }
+  .log ul { margin: 0; padding: 0 12px 10px 28px; }
+  .log li { margin: 2px 0; overflow-wrap: anywhere; }
+  .log li b { color: var(--pink); }
+  .log .note { padding: 0 12px 10px; color: var(--muted); }
+  .empty { padding: 32px 16px; text-align: center; color: var(--muted); font: 13px var(--mono); }
+  .empty code { background: var(--ink); color: var(--gold); padding: 2px 6px; }
+  .toolbar { display: flex; gap: 8px; padding: 8px 12px; border-bottom: 2px solid var(--rule); }
+  .toolbar button { font: 600 12px var(--mono); background: #fff; border: 1.5px solid var(--ink); padding: 3px 8px; cursor: pointer; }
+  .toolbar button:hover, header select:hover, header button:hover { background: var(--gold); }
+  header label.btn:hover { background: #fff; color: var(--ink); }
+
+  /* Adaptive Card chrome - approximates Outlook's Fluent styling */
+  .cardhost .ac-pushButton { font: 600 14px "Segoe UI", system-ui, sans-serif; background: #fff; color: #242424; border: 1px solid #d1d1d1; border-radius: 4px; padding: 5px 12px; cursor: pointer; min-height: 32px; }
+  .cardhost .ac-pushButton:hover { background: #f5f5f5; border-color: #c7c7c7; }
+  .cardhost .ac-pushButton.style-positive, .cardhost .ac-pushButton.primary { background: #0f6cbd; color: #fff; border-color: #0f6cbd; }
+  .cardhost .ac-pushButton[aria-expanded=true] { background: #ebf3fc; border-color: #0f6cbd; }
+  .cardhost .ac-input { font: 14px "Segoe UI", system-ui, sans-serif; border: 1px solid #d1d1d1; border-bottom-color: #616161; border-radius: 4px; padding: 5px 8px; width: 100%; background: #fff; }
+  .cardhost textarea.ac-input { min-height: 56px; resize: vertical; }
+  .cardhost .ac-selectable { cursor: pointer; border-radius: 4px; }
+  .cardhost .ac-selectable:hover { background: rgba(15,108,189,.06); }
+  .cardhost .ac-textRun[style*="monospace"], .cardhost .ac-textBlock[style*="monospace"] { letter-spacing: -0.5px; }
+</style>
+<!-- vendored by build_lab.py: markdown-it 13.0.2, adaptivecards 3.0.6 (both MIT) - works offline / behind proxies -->
+<script src="vendor/markdown-it.min.js"></script>
+<script src="vendor/adaptivecards.min.js"></script>
+</head>
+<body>
+<header>
+  <h1>OUTLOOK&nbsp;LAB</h1>
+  <p>One email source, three Outlook renderers. Classic = real Word engine render. New Outlook = Chromium + simulated Microsoft sanitizer. Card = official Adaptive Cards renderer with an Outlook-like host config.</p>
+  <select id="pick" aria-label="Email"></select>
+  <label class="btn" for="file">Load .html&hellip;</label><input id="file" type="file" accept=".html,.htm">
+</header>
+
+<main>
+  <section class="pane" id="pane-classic">
+    <h2><span>Classic Outlook &middot; Word engine</span> <span class="tag real">REAL</span></h2>
+    <div class="stage" id="classic-stage"></div>
+    <details class="log" open><summary>Render info</summary><ul id="classic-log"></ul></details>
+  </section>
+
+  <section class="pane" id="pane-owa">
+    <h2><span>New Outlook / OWA &middot; Chromium</span> <span class="tag approx">SIMULATED</span></h2>
+    <div class="toolbar"><button id="replay" type="button">&#8635; Replay (GIFs)</button></div>
+    <div class="stage" id="owa-stage"><div class="zoomwrap" id="owa-zoom"></div></div>
+    <details class="log" open><summary>Stripped by the sanitizer</summary><ul id="owa-log"></ul>
+      <p class="note">Rules approximate Outlook.com behaviour: scripts, iframes, forms, inline SVG, external CSS, interactive pseudo-classes, keyframes and positioning are removed. <code>@media</code> is kept but unverified. Verify in a real tenant.</p></details>
+  </section>
+
+  <section class="pane" id="pane-card">
+    <h2><span>Actionable Message &middot; Adaptive Card</span> <span class="tag approx">SIMULATED</span></h2>
+    <div class="cardstage"><div class="cardhost" id="card-host"></div></div>
+    <details class="log" open><summary>Card events</summary><ul id="card-log"></ul>
+      <p class="note">Action.Http is intercepted and logged here instead of being sent. In Outlook it POSTs to your registered endpoint with an Entra ID bearer token.</p></details>
+  </section>
+</main>
+
+<script>
+const EMAILS = /*__EMAILS__*/[];
+
+const OUTLOOK_HOST = {
+  fontFamily: "'Segoe UI', system-ui, -apple-system, sans-serif",
+  supportsInteractivity: true,
+  spacing: { small: 4, default: 8, medium: 16, large: 24, extraLarge: 32, padding: 12 },
+  separator: { lineThickness: 1, lineColor: "#E1DFDD" },
+  fontTypes: {
+    default: { fontFamily: "'Segoe UI', system-ui, sans-serif",
+      fontSizes: { small: 12, default: 14, medium: 16, large: 20, extraLarge: 26 },
+      fontWeights: { lighter: 300, default: 400, bolder: 600 } },
+    monospace: { fontFamily: "Consolas, Menlo, 'Courier New', monospace",
+      fontSizes: { small: 12, default: 13, medium: 15, large: 18, extraLarge: 24 },
+      fontWeights: { lighter: 300, default: 400, bolder: 600 } }
+  },
+  containerStyles: (() => {
+    const fg = {
+      default: { default: "#242424", subtle: "#616161" }, accent: { default: "#0F6CBD", subtle: "#0F6CBD" },
+      good: { default: "#107C10", subtle: "#107C10" }, warning: { default: "#8A5300", subtle: "#8A5300" },
+      attention: { default: "#C50F1F", subtle: "#C50F1F" }, dark: { default: "#242424", subtle: "#616161" },
+      light: { default: "#FFFFFF", subtle: "#F5F5F5" }
+    };
+    const bg = { default: "#FFFFFF", emphasis: "#F5F5F5", accent: "#EBF3FC", good: "#F1FAF1", attention: "#FDF3F4", warning: "#FFF9F5" };
+    return Object.fromEntries(Object.entries(bg).map(([k, v]) => [k, { backgroundColor: v, foregroundColors: fg }]));
+  })(),
+  actions: { maxActions: 6, spacing: "default", buttonSpacing: 8, actionsOrientation: "horizontal", actionAlignment: "left",
+    showCard: { actionMode: "inline", inlineTopMargin: 12 } },
+  factSet: { title: { weight: "bolder", wrap: true, maxWidth: 140 }, value: { wrap: true }, spacing: 12 },
+  imageSizes: { small: 40, medium: 80, large: 160 }
+};
+
+const $ = (id) => document.getElementById(id);
+const li = (ul, html) => { const el = document.createElement("li"); el.innerHTML = html; ul.appendChild(el); return el; };
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+/* ---------- Simulated Outlook.com / new Outlook sanitizer ---------- */
+function sanitize(html, baseHref) {
+  const log = new Map();
+  const note = (k) => log.set(k, (log.get(k) || 0) + 1);
+  const doc = new DOMParser().parseFromString(html, "text/html");
+
+  doc.querySelectorAll("script").forEach((s) => {
+    note(s.type === "application/adaptivecard+json" ? "adaptive card payload (rendered in the card pane)" : "&lt;script&gt;");
+    s.remove();
+  });
+  const kill = {
+    iframe: "&lt;iframe&gt;", object: "&lt;object&gt; / &lt;embed&gt;", embed: "&lt;object&gt; / &lt;embed&gt;",
+    form: "&lt;form&gt;", input: "form controls", button: "form controls", select: "form controls", textarea: "form controls",
+    svg: "inline &lt;svg&gt;", video: "&lt;video&gt; / &lt;audio&gt;", audio: "&lt;video&gt; / &lt;audio&gt;",
+    "link[rel~=stylesheet]": "external stylesheets", base: "&lt;base&gt;", "meta[http-equiv]": "meta http-equiv"
+  };
+  for (const [sel, label] of Object.entries(kill)) doc.querySelectorAll(sel).forEach((el) => { note(label); el.remove(); });
+
+  const badDecl = /(^|;)\s*(position|animation[\w-]*|transition[\w-]*)\s*:[^;]*/gi;
+  doc.querySelectorAll("*").forEach((el) => {
+    for (const a of [...el.attributes]) {
+      if (/^on/i.test(a.name)) { el.removeAttribute(a.name); note("on* event handlers"); }
+      else if ((a.name === "href" || a.name === "src") && /^\s*javascript:/i.test(a.value)) { el.removeAttribute(a.name); note("javascript: URLs"); }
+    }
+    const st = el.getAttribute("style");
+    if (st && badDecl.test(st)) { el.setAttribute("style", st.replace(badDecl, "$1")); note("inline position / animation / transition"); }
+    badDecl.lastIndex = 0;
+  });
+
+  const cleanRules = (rules) => {
+    const out = [];
+    for (const r of rules) {
+      if (r instanceof CSSKeyframesRule) { note("@keyframes"); continue; }
+      if (r instanceof CSSImportRule) { note("@import"); continue; }
+      if (r instanceof CSSMediaRule) { note("@media (kept, unverified)"); out.push(`@media ${r.conditionText} {${cleanRules(r.cssRules)}}`); continue; }
+      if (r instanceof CSSStyleRule) {
+        if (/:(hover|focus|focus-within|active|checked|target)\b/i.test(r.selectorText)) { note("interactive pseudo-classes (:hover, :checked &hellip;)"); continue; }
+        if (/(^|;)\s*(position|animation|transition)/i.test(r.style.cssText)) {
+          for (const p of [...r.style]) if (/^(position|animation|transition)/.test(p)) r.style.removeProperty(p);
+          note("position / animation / transition in &lt;style&gt;");
+        }
+      }
+      out.push(r.cssText);
+    }
+    return out.join("\n");
+  };
+  doc.querySelectorAll("style").forEach((s) => {
+    const sheet = new CSSStyleSheet();
+    try { sheet.replaceSync(s.textContent); s.textContent = cleanRules(sheet.cssRules); }
+    catch (e) { note("unparseable &lt;style&gt; block"); s.remove(); }
+  });
+
+  const base = doc.createElement("base");
+  if (baseHref) base.href = baseHref;
+  base.target = "_blank";
+  doc.head.prepend(base);
+  return { srcdoc: "<!DOCTYPE html>\n" + doc.documentElement.outerHTML, log };
+}
+
+/* ---------- panes ---------- */
+let current = null;
+
+function renderClassic(email) {
+  const stage = $("classic-stage"), log = $("classic-log");
+  stage.innerHTML = ""; log.innerHTML = "";
+  if (email.classicPdf) {
+    stage.innerHTML = `<iframe title="Classic render (PDF)" src="${esc(email.classicPdf)}" style="width:100%;height:1400px;border:0"></iframe>`;
+    li(log, "PDF fallback (PyMuPDF not installed): <code>python -m pip install pymupdf</code> for a PNG.");
+  } else if (!email.classicPng) {
+    stage.innerHTML = `<div class="empty">No Word render for this file yet.<br><br>Run <code>python render_classic.py ${esc(email.file || "your.html")}</code> then rebuild.</div>`;
+    li(log, "Classic Outlook can't be simulated in a browser: it uses Word's HTML engine (VML, conditional comments, its own box model).");
+    return;
+  } else {
+    const img = new Image();
+    img.src = email.classicPng; img.alt = "Classic Outlook render of " + email.title;
+    stage.appendChild(img);
+  }
+  li(log, `Rendered by <b>${esc(email.engine)}</b> via COM &rarr; PDF &rarr; PNG`);
+  li(log, `Rendered at ${esc(email.renderedAt)}`);
+  li(log, "MSO conditional branch active: VML shapes are drawn natively by Word.");
+  const msoGifs = (email.html.match(/<!--\[if mso\]>[\s\S]*?<!\[endif\]-->/g) || []).join("").match(/\.gif/g);
+  if (msoGifs) li(log, `<b>${msoGifs.length} GIF(s) in the classic branch:</b> this export shows frame 1 (what Outlook 2013-2019 shows). Outlook for M365 animates them, max 3 loops then a Play button.`);
+}
+
+function renderOwa(email) {
+  const zoom = $("owa-zoom"), log = $("owa-log");
+  zoom.innerHTML = ""; log.innerHTML = "";
+  const { srcdoc, log: stripped } = sanitize(email.html, email.base ? new URL(email.base, location.href).href : "");
+  const frame = document.createElement("iframe");
+  frame.title = "New Outlook simulation";
+  frame.setAttribute("sandbox", "allow-same-origin allow-popups allow-popups-to-escape-sandbox");
+  frame.srcdoc = srcdoc;
+  frame.addEventListener("load", () => {
+    const fit = () => { frame.style.height = frame.contentDocument.documentElement.scrollHeight + "px"; fitZoom(); };
+    fit();
+    frame.contentWindow.addEventListener("load", fit);
+    [...frame.contentDocument.images].forEach((im) => im.complete || im.addEventListener("load", fit));
+  });
+  zoom.appendChild(frame);
+  if (!stripped.size) li(log, "Nothing stripped.");
+  for (const [k, n] of stripped) li(log, `<b>${n}&times;</b> ${k}`);
+  if (!email.base) li(log, "Loaded from disk: relative images can't resolve (no base path).");
+}
+
+function fitZoom() {
+  const stage = $("owa-stage"), zoom = $("owa-zoom"), frame = zoom.querySelector("iframe");
+  if (!frame) return;
+  const scale = Math.min(1, stage.clientWidth / 680);
+  zoom.style.transform = `scale(${scale})`;
+  stage.style.height = (frame.offsetHeight * scale) + "px";
+}
+
+function extractCard(html) {
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  const s = doc.querySelector('script[type="application/adaptivecard+json"]');
+  return s ? JSON.parse(s.textContent) : null;
+}
+
+function renderCard(email) {
+  const host = $("card-host"), log = $("card-log");
+  host.innerHTML = ""; log.innerHTML = "";
+  if (typeof AdaptiveCards === "undefined") { host.innerHTML = '<div class="empty">Adaptive Cards renderer failed to load (offline?).</div>'; return; }
+  let json;
+  try { json = extractCard(email.html); } catch (e) { li(log, `<b>Invalid card JSON:</b> ${esc(e.message)}`); return; }
+  if (!json) { host.innerHTML = '<div class="empty">No <code>application/adaptivecard+json</code> script in &lt;head&gt;.<br>This email has no Actionable Message layer.</div>'; return; }
+
+  const md = window.markdownit ? window.markdownit() : null;
+  AdaptiveCards.AdaptiveCard.onProcessMarkdown = (text, result) => {
+    if (md) { result.outputHtml = md.renderInline(text); result.didProcess = true; }
+  };
+  // Action.Http is Outlook-only: the JS renderer ships the class but doesn't register it by default.
+  if (!AdaptiveCards.GlobalRegistry.actions.findByName("Action.Http")) {
+    AdaptiveCards.GlobalRegistry.actions.register(AdaptiveCards.HttpAction.JsonTypeName, AdaptiveCards.HttpAction);
+  }
+  const card = new AdaptiveCards.AdaptiveCard();
+  card.hostConfig = new AdaptiveCards.HostConfig(OUTLOOK_HOST);
+  card.onExecuteAction = (action) => {
+    const type = action.getJsonTypeName();
+    if (type === "Action.Http") {
+      li(log, `<b>Action.Http</b> ${esc(action.method || "POST")} ${esc(action.url)}<br>body: ${esc(action.body || "")}`);
+    } else if (type === "Action.OpenUrl") {
+      li(log, `<b>Action.OpenUrl</b> ${esc(action.url)} (not opened)`);
+    } else if (type === "Action.Submit" || type === "Action.Execute") {
+      li(log, `<b>${type}</b> ${esc(JSON.stringify(action.data))} (Outlook doesn't support Submit; use Action.Http)`);
+    } else {
+      li(log, `<b>${esc(type)}</b> ${esc(action.title || "")}`);
+    }
+  };
+  let pending = [];
+  card.onElementVisibilityChanged = (el) => {
+    pending.push(`${el.id}${el.isVisible ? "+" : "-"}`);
+    queueMicrotask(() => { if (pending.length) { li(log, `<b>ToggleVisibility</b> ${esc(pending.join(" "))}`); pending = []; } });
+  };
+  const ctx = new AdaptiveCards.SerializationContext();
+  card.parse(json, ctx);
+  for (let i = 0; i < ctx.eventCount; i++) {
+    const ev = ctx.getEventAt(i);
+    li(log, `<b>parse ${ev.phase === 0 ? "" : ""}warning:</b> ${esc(ev.message)}`);
+  }
+  const rendered = card.render();
+  host.appendChild(rendered);
+  li(log, `Card schema v${esc(json.version || "?")} &middot; ${(JSON.stringify(json).length / 1024).toFixed(1)} KB &middot; hideOriginalBody=${!!json.hideOriginalBody}`);
+  if (!json.originator) li(log, "No originator: renders only when sent to yourself (from = to). Register a provider to send to others.");
+}
+
+function show(email) {
+  current = email;
+  renderClassic(email);
+  renderOwa(email);
+  renderCard(email);
+}
+
+/* ---------- wiring ---------- */
+const pick = $("pick");
+EMAILS.forEach((e, i) => pick.add(new Option(e.title, i)));
+pick.addEventListener("change", () => show(EMAILS[pick.value]));
+$("replay").addEventListener("click", () => current && renderOwa(current));
+$("file").addEventListener("change", async (ev) => {
+  const f = ev.target.files[0]; if (!f) return;
+  const email = { title: f.name, file: f.name, html: await f.text(), base: "", classicPng: "" };
+  pick.add(new Option(f.name + " (local)", EMAILS.push(email) - 1));
+  pick.value = EMAILS.length - 1;
+  show(email);
+});
+new ResizeObserver(fitZoom).observe($("owa-stage"));
+if (EMAILS.length) show(EMAILS[0]);
+</script>
+</body>
+</html>

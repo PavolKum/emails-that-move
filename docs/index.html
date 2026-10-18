@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Animated charts, vector graphics and scenes that breathe, inside the Outlook inbox. A free kit, built with Claude Code in one Saturday.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Outlook Email Kit: emails that move">
+<meta property="og:description" content="Animated charts, vector graphics and scenes that breathe, inside the Outlook inbox. A free kit, built with Claude Code in one Saturday.">
+<meta property="og:url" content="https://pavolkum.github.io/outlook-email-kit/">
+<meta property="og:image" content="https://pavolkum.github.io/outlook-email-kit/img/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Outlook Email Kit</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a full-bleed gold masthead (the emails' own header), then one Outlook window, four tricks, and the
+   build story under a night sky. Type is the emails' own: Georgia for words, a mono for labels and numbers. */
+:root {
+  --gold: #FFC21A; --pink: #FF2E7E; --ink: #0D0D0F; --night: #11162B; --night-deep: #090C1A;
+  --bg: #F3EEE3; --surface: #FAF7EF; --fg: #0D0D0F; --muted: #5D574A; --line: #D6CEBD; --bar: #FFC21A;
+  --chrome: #EDEBE9; --chrome-fg: #242424; --list: #FFFFFF; --list-fg: #242424; --list-muted: #616161;
+  --sel: #E6EFFA; --sel-bar: #0F6CBD; --reader: #FFFFFF; --frame: #C8C6C4;
+  --serif: Georgia, "Times New Roman", serif;
+  --mono: "IBM Plex Mono", Consolas, "Courier New", monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0D0D0F; --surface: #17161A; --fg: #F3EEE3; --muted: #A39E94; --line: #2E2B26; --bar: #FFC21A;
+  --chrome: #1F1F1F; --chrome-fg: #E6E6E6; --list: #262626; --list-fg: #EDEDED; --list-muted: #ADADAD;
+  --sel: #1D3349; --sel-bar: #479EF5; --reader: #1A1A1A; --frame: #3B3B3B; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0D0D0F; --surface: #17161A; --fg: #F3EEE3; --muted: #A39E94; --line: #2E2B26; --bar: #FFC21A;
+  --chrome: #1F1F1F; --chrome-fg: #E6E6E6; --list: #262626; --list-fg: #EDEDED; --list-muted: #ADADAD;
+  --sel: #1D3349; --sel-bar: #479EF5; --reader: #1A1A1A; --frame: #3B3B3B; color-scheme: dark }
+
+body { background: var(--bg); color: var(--fg); font: 17px/1.55 var(--serif); }
+.inner { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.mono { font-family: var(--mono); }
+h1, h2, h3 { font-weight: normal; text-wrap: balance; margin: 0; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--pink); outline-offset: 2px; }
+
+/* masthead */
+.mast { background: var(--gold); color: var(--ink); border-bottom: 3px solid var(--ink); }
+.mast .inner { padding-block: 34px 38px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px 40px;
+  align-items: end; }
+.eyebrow { grid-column: 1 / -1; font: 500 12px/1.4 var(--mono); letter-spacing: 1.8px; margin: 0; }
+.mast h1 { font-size: clamp(48px, 9vw, 92px); line-height: .98; letter-spacing: -0.05em; }
+.mast .intro { font-size: 20px; line-height: 1.45; max-width: 36em; margin: 18px 0 0; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: center; margin-top: 24px; }
+.btn { display: inline-block; background: var(--ink); color: #F3EEE3; text-decoration: none; padding: 12px 20px;
+  font: 600 14px/1 var(--mono); letter-spacing: .5px; border: 2px solid var(--ink); }
+.btn:hover { background: transparent; color: var(--ink); }
+.cta small { font: 12px/1.4 var(--mono); letter-spacing: .4px; }
+.numeral { align-self: center; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+.numeral b { display: block; font: 700 clamp(96px, 16vw, 168px)/.8 var(--mono); color: var(--pink); }
+.numeral span { font: 500 12px/1.5 var(--mono); letter-spacing: 1.8px; margin-right: -1.8px; }
+
+/* sections */
+section { padding-block: 56px 8px; }
+.head { display: grid; gap: 8px; margin-bottom: 26px; max-width: 46em; }
+.head h2 { font-size: clamp(30px, 4.4vw, 40px); line-height: 1.08; letter-spacing: -0.03em; }
+.head p { margin: 0; color: var(--muted); font-size: 18px; }
+.label { font: 500 11px/1.4 var(--mono); letter-spacing: 1.6px; color: var(--muted); text-transform: uppercase; }
+/* the Outlook window */
+.window { border: 1px solid var(--frame); background: var(--chrome); box-shadow: 0 18px 50px rgba(13, 13, 15, .18);
+  color: var(--chrome-fg); font: 13px/1.4 "Segoe UI", system-ui, sans-serif; }
+.titlebar { display: flex; align-items: center; gap: 14px; padding: 8px 12px; }
+.titlebar .app { font-weight: 600; }
+.titlebar .search { flex: 1; max-width: 420px; margin: 0 auto; background: var(--list); color: var(--list-muted);
+  border-radius: 4px; padding: 5px 10px; }
+.titlebar .ctl { letter-spacing: 14px; color: var(--list-muted); }
+.cols { display: grid; grid-template-columns: 290px minmax(0, 1fr); border-top: 1px solid var(--frame); }
+.list { background: var(--list); color: var(--list-fg); border-right: 1px solid var(--frame); display: flex;
+  flex-direction: column; }
+.folder { padding: 12px 14px 8px; font-weight: 600; font-size: 15px; }
+.msg { all: unset; box-sizing: border-box; cursor: pointer; display: grid; grid-template-columns: 1fr auto; gap: 1px 8px;
+  padding: 10px 14px 11px 11px; border-left: 3px solid transparent; border-bottom: 1px solid var(--frame); }
+.msg:hover { background: var(--sel); }
+.msg[aria-pressed="true"] { background: var(--sel); border-left-color: var(--sel-bar); }
+.msg .from { font-weight: 600; font-size: 14px; }
+.msg .time { color: var(--list-muted); font-size: 12px; }
+.msg .subj { grid-column: 1 / -1; color: var(--sel-bar); }
+.msg .prev { grid-column: 1 / -1; color: var(--list-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.msg:focus-visible { outline-offset: -3px; }
+.reader { background: var(--reader); min-width: 0; display: flex; flex-direction: column; }
+.readhead { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; padding: 14px 18px 12px;
+  border-bottom: 1px solid var(--frame); }
+.readhead h3 { font: 600 18px/1.3 "Segoe UI", system-ui, sans-serif; color: var(--list-fg); }
+.readhead p { margin: 3px 0 0; color: var(--list-muted); }
+.replay { all: unset; cursor: pointer; font: 500 12px/1 var(--mono); color: var(--list-fg); border: 1px solid var(--frame);
+  padding: 7px 10px; white-space: nowrap; }
+.replay:hover { border-color: var(--sel-bar); }
+.mailview { height: clamp(460px, 66vh, 680px); overflow: auto; background: #F3F3F1; }
+.caption { font: 12px/1.6 var(--mono); color: var(--muted); margin: 14px 0 0; max-width: 64em; }
+
+/* tricks */
+.tricks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.trick { background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; }
+.trick .shot { background: #FFFFFF; border-bottom: 1px solid var(--line); display: grid; place-items: center;
+  height: 290px; overflow: hidden; }
+.trick .shot img { max-height: 290px; max-width: 100%; width: auto; height: auto; object-fit: contain; }
+.trick .shot.dark { background: var(--night-deep); }
+.trick button.shot { all: unset; box-sizing: border-box; cursor: pointer; background: #FFFFFF; display: grid;
+  place-items: center; height: 290px; overflow: hidden; border-bottom: 1px solid var(--line); width: 100%; }
+.trick .text { padding: 18px 20px 22px; display: grid; gap: 8px; }
+.trick h3 { font-size: 23px; line-height: 1.2; letter-spacing: -0.01em; }
+.trick p { margin: 0; font-size: 16px; }
+.trick .note { font: 12px/1.6 var(--mono); color: var(--muted); }
+.render { width: 100%; height: 100%; box-sizing: border-box; padding: 22px; display: grid; align-content: center; gap: 10px;
+  background: #FFFFFF; color: #222; font: 12.5px/1.6 var(--mono); }
+.render .bar { display: flex; justify-content: space-between; border-bottom: 2px solid #111; padding-bottom: 8px;
+  font-weight: 600; letter-spacing: 1.4px; }
+.render .real { background: var(--gold); color: var(--ink); padding: 1px 6px; border: 1px solid var(--ink); }
+.render ul { margin: 0; padding-left: 18px; }
+.render em { font-style: normal; color: #C2185B; }
+
+/* story */
+.stats { display: flex; flex-wrap: wrap; gap: 10px 28px; margin: 0 0 18px; }
+.stats div { display: grid; }
+.stats b { font: 600 30px/1.1 var(--mono); }
+.stats span { font: 12px/1.4 var(--mono); color: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; font: 12px/1.5 var(--mono); color: var(--muted); margin-bottom: 14px; }
+.legend i { display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: -1px;
+  box-shadow: 0 0 0 1px var(--line); }
+.legend em { font-style: normal; opacity: .75; }
+.sky { background: linear-gradient(var(--night-deep), var(--night)); padding: 18px 16px 6px; overflow: hidden; }
+.city { display: block; width: 100%; height: auto; }
+.city text { shape-rendering: auto; }
+.replaying .bldg rect:not(.on), .replaying .bldg text:not(.on), .replaying .riv:not(.on) { visibility: hidden; }
+
+/* the replay panel: one strip of night under the sky */
+.now { background: var(--night); color: #E9E6F2; border-top: 1px solid #262C4A; padding: 16px 20px 18px;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px 24px; align-items: start; min-height: 132px; }
+.now .meta { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px 18px; font: 500 12px/1.4 var(--mono);
+  letter-spacing: 1.2px; color: #8D90AA; }
+.now .meta .clock { color: var(--gold); }
+.now .lines { display: grid; gap: 8px; min-width: 0; max-width: 52em; }
+.now .you { margin: 0; font-size: 18px; line-height: 1.45; }
+.now .you::before { content: "You  "; font: 600 11px/1 var(--mono); letter-spacing: 1.4px; color: var(--gold); }
+.now .claude { margin: 0; font-size: 15px; color: #B7B4C7; }
+.now .claude::before { content: "Claude  "; font: 600 11px/1 var(--mono); letter-spacing: 1.4px; color: #FF2E7E; }
+.now .claude:empty, .now .you:empty { display: none; }
+.now .caret { display: inline-block; width: .5em; height: 1em; background: var(--gold); vertical-align: -2px;
+  margin-left: 2px; animation: caret 1s steps(1) infinite; }
+@keyframes caret { 50% { opacity: 0; } }
+.now .meter { font: 600 13px/1.4 var(--mono); color: #E9E6F2; }
+.now .meter b { font-size: 22px; color: var(--gold); }
+.play { all: unset; cursor: pointer; font: 600 13px/1 var(--mono); letter-spacing: .5px; color: var(--ink);
+  background: var(--gold); padding: 11px 16px; white-space: nowrap; }
+.play:hover { background: #FFD45C; }
+.play:focus-visible { outline: 3px solid #FF2E7E; outline-offset: 2px; }
+.city text { font: 500 11px var(--mono); fill: #8D90AA; text-anchor: middle; }
+.city .bldg { cursor: default; }
+.city .bldg:hover rect, .city .bldg.hl rect { filter: brightness(1.3); }
+.city .bldg:hover text, .city .bldg.hl text { fill: #FFC21A; }
+.city .star { fill: #C4C8DE; animation: twinkle 5s ease-in-out infinite; animation-delay: calc(-1 * var(--o)); }
+.city .flick { animation: flick var(--d) linear infinite; animation-delay: calc(-1 * var(--o)); }
+.city .nap { animation: nap var(--d) ease-in-out infinite; animation-delay: calc(-1 * var(--o)); }
+@keyframes flick { 0%, 86%, 100% { opacity: 1 } 87% { opacity: .15 } 88.5% { opacity: 1 } 90% { opacity: .3 } 91% { opacity: 1 } }
+@keyframes nap { 0%, 50%, 100% { opacity: 1 } 56%, 84% { opacity: .1 } }
+@keyframes twinkle { 0%, 100% { opacity: .9 } 50% { opacity: .25 } }
+@media (prefers-reduced-motion: reduce) { .city * { animation: none !important; } }
+
+footer { margin-top: 56px; border-top: 1px solid var(--line); }
+footer .inner { padding-block: 22px 40px; font: 12px/1.7 var(--mono); color: var(--muted); }
+
+@media (max-width: 760px) {
+  .mast .inner { grid-template-columns: minmax(0, 1fr); }
+  .numeral { align-self: start; flex-direction: row; align-items: center; gap: 14px; text-align: left; }
+  .cols { grid-template-columns: minmax(0, 1fr); }
+  .list { flex-direction: row; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--frame); }
+  .folder { display: none; }
+  .msg { min-width: 220px; border-bottom: 0; border-right: 1px solid var(--frame); }
+  .titlebar .search, .titlebar .ctl { display: none; }
+  .tricks { grid-template-columns: minmax(0, 1fr); }
+}
+</style>
+</head>
+<body>
+
+
+<header class="mast">
+  <div class="inner">
+    <p class="eyebrow">OUTLOOK EMAIL KIT / ONE SATURDAY, 11 PROMPTS, VOICE MODE / BUILT WITH CLAUDE CODE</p>
+    <div>
+      <h1>Emails that move.</h1>
+      <p class="intro">Animated charts, vector graphics and scenes that breathe, all inside the Outlook inbox, the
+        strictest canvas in office software.</p>
+      <div class="cta">
+        <a class="btn" href="https://github.com/PavolKum/outlook-email-kit">Get the kit on GitHub</a>
+        <small>Python · MIT licence · drops into Claude Code as a skill</small>
+      </div>
+    </div>
+    <div class="numeral" aria-label="Zero lines of JavaScript"><b>0</b><span>LINES OF<br>JAVASCRIPT</span></div>
+  </div>
+</header>
+
+<main>
+  <section id="inbox">
+    <div class="inner">
+      <div class="head">
+        <span class="label">Try it</span>
+        <h2>Two emails, one inbox</h2>
+        <p>Pick a message. This is the real HTML the kit generates, shown the way new Outlook and Outlook on the
+          web render it. The charts and the night scene are animated GIFs.</p>
+      </div>
+      <div class="window" role="region" aria-label="Simulated Outlook window">
+        <div class="titlebar"><span class="app">Outlook</span><span class="search">Search</span><span class="ctl" aria-hidden="true">&#8211;&#9633;&#10005;</span></div>
+        <div class="cols">
+          <nav class="list" aria-label="Messages">
+            <div class="folder">Inbox</div>
+            <button class="msg" id="msg-roast" data-mail="roast" aria-pressed="true">
+              <span class="from">Roast Report</span><span class="time">Fri 07:30</span>
+              <span class="subj">Week 42: roasters at 82.4% of capacity</span>
+              <span class="prev">Two lots sell out before the next harvest.</span>
+            </button>
+            <button class="msg" id="msg-tower" data-mail="tower" aria-pressed="false">
+              <span class="from">No. 25 Window Street</span><span class="time">Sat 23:10</span>
+              <span class="subj">Put the tower to bed.</span>
+              <span class="prev">The night shift: one GIF on a soft loop.</span>
+            </button>
+          </nav>
+          <div class="reader">
+            <div class="readhead">
+              <div><h3 id="r-subj">Week 42: roasters at 82.4% of capacity</h3>
+                <p id="r-from">Roast Report &lt;roast@example.com&gt; · to you</p></div>
+              <button class="replay" id="replay" type="button">&#8635; Replay</button>
+            </div>
+            <div class="mailview" id="mailview"></div>
+          </div>
+        </div>
+      </div>
+      <p class="caption">Simulated new Outlook. Classic Outlook (the Word engine) gets its own build of each email,
+        with VML charts in place of the GIFs. Outlook 2013 to 2019 shows a GIF's first frame, so the kit makes
+        frame 1 the finished chart. All data is fictional.</p>
+    </div>
+  </section>
+
+  <section id="story">
+    <div class="inner">
+      <div class="head">
+        <span class="label">How it was built</span>
+        <h2>Watch it get built</h2>
+        <p>The whole kit came out of a single Claude Code conversation. Each building is a prompt and each lit
+          window is a tool call Claude made, coloured by kind. A river marks where the conversation was compacted
+          to free up its context.</p>
+      </div>
+      <div class="stats">
+        <div><b>11</b><span>prompts</span></div>
+        <div><b>323</b><span>tool calls</span></div>
+        <div><b>1 h 43 min</b><span>Claude working</span></div>
+        <div><b>2</b><span>compactions</span></div>
+      </div>
+      <div class="legend"><span><i style="background:#ffc21a"></i>making <em>Edit, Write</em></span><span><i style="background:#9c7a1c"></i>looking <em>Read, Grep, Glob</em></span><span><i style="background:#f3eee3"></i>running <em>Bash, PowerShell</em></span><span><i style="background:#5b7cfa"></i>outside <em>web, subagents, skills</em></span><span><i style="background:#ff2e7e"></i>failed <em>a call that errored and was retried</em></span></div>
+      <div class="sky" id="sky"><svg class="city" viewBox="0 0 1120 198" shape-rendering="crispEdges" role="img" aria-label="The session as a city: 11 buildings, one per prompt"><rect class="riv" data-n="1" x="32" y="128" width="16" height="16" fill="#5b7cfa"/><rect class="riv" data-n="1" x="32" y="144" width="16" height="16" fill="#5b7cfa"/><rect class="riv" data-n="3" x="224" y="160" width="16" height="16" fill="#5b7cfa"/><rect class="riv" data-n="5" x="432" y="160" width="16" height="16" fill="#1e3476"/><rect class="riv" data-n="5" x="448" y="160" width="16" height="16" fill="#5b7cfa"/><rect class="riv" data-n="5" x="464" y="160" width="16" height="16" fill="#1e3476"/><rect class="riv" data-n="5" x="480" y="160" width="16" height="16" fill="#1e3476"/><rect class="star" x="708" y="20" width="3" height="3" style="--o:2.15s"/><rect class="star" x="724" y="36" width="3" height="3" style="--o:5.23s"/><rect class="riv" data-n="8" x="784" y="160" width="16" height="16" fill="#1e3476"/><rect class="riv" data-n="8" x="800" y="160" width="16" height="16" fill="#5b7cfa"/><rect class="riv" data-n="8" x="816" y="160" width="16" height="16" fill="#1e3476"/><rect class="riv" data-n="8" x="832" y="160" width="16" height="16" fill="#1e3476"/><rect class="star" x="884" y="4" width="3" height="3" style="--o:1.57s"/><rect class="star" x="996" y="36" width="3" height="3" style="--o:5.29s"/><rect class="star" x="1076" y="20" width="3" height="3" style="--o:5.19s"/><g class="bldg" data-n="1"><title>01. let&#x27;s try to find the most creative way to use HTML that is accessible or showable in stan
+4 tool calls (1 looking, 3 outside)</title><rect x="16" y="128" width="16" height="16" fill="#283060"/><rect x="16" y="144" width="16" height="16" fill="#283060"/><rect x="16" y="160" width="16" height="16" fill="#283060"/><rect x="32" y="160" width="16" height="16" fill="#9c7a1c" class="lit flick" style="--d:10.7s;--o:2.30s"/><rect x="48" y="128" width="16" height="16" fill="#283060"/><rect x="48" y="144" width="16" height="16" fill="#283060"/><rect x="48" y="160" width="16" height="16" fill="#283060"/><text x="40.0" y="190">01</text></g><g class="bldg" data-n="2"><title>02. you can create like simulated MSG environments, right? so you can have like an HTML contai
+60 tool calls (30 making, 10 looking, 15 running, 1 outside, 4 failed)</title><rect x="80" y="96" width="16" height="16" fill="#343d74"/><rect x="80" y="112" width="16" height="16" fill="#343d74"/><rect x="80" y="128" width="16" height="16" fill="#343d74"/><rect x="80" y="144" width="16" height="16" fill="#343d74"/><rect x="80" y="160" width="16" height="16" fill="#343d74"/><rect x="96" y="80" width="16" height="16" fill="#343d74"/><rect x="96" y="96" width="16" height="16" fill="#ffc21a"/><rect x="96" y="112" width="16" height="16" fill="#f3eee3"/><rect x="96" y="128" width="16" height="16" fill="#ffc21a" class="lit flick" style="--d:10.8s;--o:5.72s"/><rect x="96" y="144" width="16" height="16" fill="#ffc21a" class="lit flick" style="--d:8.1s;--o:3.73s"/><rect x="96" y="160" width="16" height="16" fill="#ff2e7e" class="lit flick" style="--d:5.1s;--o:4.15s"/><rect x="112" y="80" width="16" height="16" fill="#343d74"/><rect x="112" y="96" width="16" height="16" fill="#343d74"/><rect x="112" y="112" width="16" height="16" fill="#343d74"/><rect x="112" y="128" width="16" height="16" fill="#343d74"/><rect x="112" y="144" width="16" height="16" fill="#343d74"/><rect x="112" y="160" width="16" height="16" fill="#343d74"/><rect x="128" y="80" width="16" height="16" fill="#343d74"/><rect x="128" y="96" width="16" height="16" fill="#f3eee3"/><rect x="128" y="112" width="16" height="16" fill="#9c7a1c" class="lit flick" style="--d:5.2s;--o:7.35s"/><rect x="128" y="128" width="16" height="16" fill="#ff2e7e" class="lit nap" style="--d:12.8s;--o:6.71s"/><rect x="128" y="144" width="16" height="16" fill="#ffc21a"/><rect x="128" y="160" width="16" height="16" fill="#ffc21a"/><rect x="144" y="80" width="16" height="16" fill="#343d74"/><rect x="144" y="96" width="16" height="16" fill="#343d74"/><rect x="144" y="112" width="16" height="16" fill="#343d74"/><rect x="144" y="128" width="16" height="16" fill="#343d74"/><rect x="144" y="144" width="16" height="16" fill="#343d74"/><rect x="144" y="160" width="16" height="16" fill="#343d74"/><rect x="160" y="80" width="16" height="16" fill="#343d74"/><rect x="160" y="96" width="16" height="16" fill="#ffc21a" class="lit nap" style="--d:9.4s;--o:4.90s"/><rect x="160" y="112" width="16" height="16" fill="#ffc21a"/><rect x="160" y="128" width="16" height="16" fill="#ff2e7e"/><rect x="160" y="144" width="16" height="16" fill="#ffc21a"/><rect x="160" y="160" width="16" height="16" fill="#f3eee3"/><rect x="176" y="96" width="16" height="16" fill="#343d74"/><rect x="176" y="112" width="16" height="16" fill="#343d74"/><rect x="176" y="128" width="16" height="16" fill="#343d74"/><rect x="176" y="144" width="16" height="16" fill="#343d74"/><rect x="176" y="160" width="16" height="16" fill="#343d74"/><text x="136.0" y="190">02</text></g><g class="bldg" data-n="3"><title>03. wow, these look amazing. I&#x27;m interested in this GIF idea. does that actually work? because
+60 tool calls (25 making, 7 looking, 21 running, 4 outside, 3 failed)</title><rect x="208" y="80" width="16" height="16" fill="#283060"/><rect x="208" y="96" width="16" height="16" fill="#283060"/><rect x="208" y="112" width="16" height="16" fill="#283060"/><rect x="208" y="128" width="16" height="16" fill="#283060"/><rect x="208" y="144" width="16" height="16" fill="#283060"/><rect x="208" y="160" width="16" height="16" fill="#283060"/><rect x="224" y="80" width="16" height="16" fill="#ff2e7e" class="lit flick" style="--d:10.7s;--o:3.37s"/><rect x="224" y="96" width="16" height="16" fill="#ffc21a" class="lit flick" style="--d:8.0s;--o:5.57s"/><rect x="224" y="112" width="16" height="16" fill="#ffc21a"/><rect x="224" y="128" width="16" height="16" fill="#ffc21a"/><rect x="224" y="144" width="16" height="16" fill="#f3eee3" class="lit nap" style="--d:13.5s;--o:5.49s"/><rect x="240" y="80" width="16" height="16" fill="#283060"/><rect x="240" y="96" width="16" height="16" fill="#283060"/><rect x="240" y="112" width="16" height="16" fill="#283060"/><rect x="240" y="128" width="16" height="16" fill="#283060"/><rect x="240" y="144" width="16" height="16" fill="#283060"/><rect x="240" y="160" width="16" height="16" fill="#283060"/><rect x="256" y="80" width="16" height="16" fill="#f3eee3" class="lit flick" style="--d:9.3s;--o:3.76s"/><rect x="256" y="96" width="16" height="16" fill="#ffc21a"/><rect x="256" y="112" width="16" height="16" fill="#f3eee3"/><rect x="256" y="128" width="16" height="16" fill="#ffc21a"/><rect x="256" y="144" width="16" height="16" fill="#f3eee3"/><rect x="256" y="160" width="16" height="16" fill="#f3eee3" class="lit nap" style="--d:9.1s;--o:8.96s"/><rect x="272" y="80" width="16" height="16" fill="#283060"/><rect x="272" y="96" width="16" height="16" fill="#283060"/><rect x="272" y="112" width="16" height="16" fill="#283060"/><rect x="272" y="128" width="16" height="16" fill="#283060"/><rect x="272" y="144" width="16" height="16" fill="#283060"/><rect x="272" y="160" width="16" height="16" fill="#283060"/><rect x="288" y="80" width="16" height="16" fill="#ffc21a" class="lit flick" style="--d:7.6s;--o:1.47s"/><rect x="288" y="96" width="16" height="16" fill="#ff2e7e"/><rect x="288" y="112" width="16" height="16" fill="#ffc21a" class="lit nap" style="--d:17.5s;--o:7.35s"/><rect x="288" y="128" width="16" height="16" fill="#ffc21a" class="lit flick" style="--d:6.9s;--o:8.70s"/><rect x="288" y="144" width="16" height="16" fill="#ffc21a"/><rect x="288" y="160" width="16" height="16" fill="#ff2e7e" class="lit flick" style="--d:6.6s;--o:2.46s"/><rect x="304" y="80" width="16" height="16" fill="#283060"/><rect x="304" y="96" width="16" height="16" fill="#283060"/><rect x="304" y="112" width="16" height="16" fill="#283060"/><rect x="304" y="128" width="16" height="16" fill="#283060"/><rect x="304" y="144" width="16" height="16" fill="#283060"/><rect x="304" y="160" width="16" height="16" fill="#283060"/><text x="264.0" y="190">03</text></g><g class="bldg" data-n="4"><title>04. yeah, you can commit and push.
+12 tool calls (5 making, 7 running)</title><rect x="336" y="112" width="16" height="16" fill="#343d74"/><rect x="336" y="128" width="16" height="16" fill="#343d74"/><rect x="336" y="144" width="16" height="16" fill="#343d74"/><rect x="336" y="160" width="16" height="16" fill="#343d74"/><rect x="352" y="112" width="16" height="16" fill="#f3eee3" class="lit flick" style="--d:9.6s;--o:2.38s"/><rect x="352" y="128" width="16" height="16" fill="#ffc21a"/><rect x="352" y="144" width="16" height="16" fill="#ffc21a"/><rect x="352" y="160" width="16" height="16" fill="#f3eee3" class="lit nap" style="--d:13.1s;--o:3.47s"/><rect x="368" y="112" width="16" height="16" fill="#343d74"/><rect x="368" y="128" width="16" height="16" fill="#343d74"/><rect x="368" y="144" width="16" height="16" fill="#343d74"/><rect x="368" y="160" width="16" height="16" fill="#343d74"/><rect x="384" y="112" width="16" height="16" fill="#f3eee3"/><rect x="384" y="128" width="16" height="16" fill="#ffc21a" class="lit flick" style="--d:6.0s;--o:6.69s"/><rect x="384" y="144" width="16" height="16" fill="#ffc21a"/><rect x="384" y="160" width="16" height="16" fill="#f3eee3"/><rect x="400" y="112" width="16" height="16" fill="#343d74"/><rect x="400" y="128" width="16" height="16" fill="#343d74"/><rect x="400" y="144" width="16" height="16" fill="#343d74"/><rect x="400" y="160" width="16" height="16" fill="#343d74"/><text x="376.0" y="190">04</text></g><g class="bldg" data-n="5"><title>05. let&#x27;s have another shot at it. go blind and try to produce something really creative.
+81 tool calls (19 making, 27 looking, 31 running, 4 outside)</title><rect x="496" y="80" width="16" height="16" fill="#283060"/><rect x="496" y="96" width="16" height="16" fill="#283060"/><rect x="496" y="112" width="16" height="16" fill="#283060"/><rect x="496" y="128" width="16" height="16" fill="#283060"/><rect x="496" y="144" width="16" height="16" fill="#283060"/><rect x="496" y="160" width="16" height="16" fill="#283060"/><rect x="512" y="64" width="16" height="16" fill="#283060"/><rect x="512" y="80" width="16" height="16" fill="#f3eee3" class="lit nap" style="--d:17.1s;--o:11.71s"/><rect x="512" y="96" width="16" height="16" fill="#f3eee3"/><rect x="512" y="112" width="16" height="16" fill="#9c7a1c" class="lit flick" style="--d:10.0s;--o:8.86s"/><rect x="512" y="128" width="16" height="16" fill="#ffc21a" class="lit flick" style="--d:10.1s;--o:7.34s"/><rect x="512" y="144" width="16" height="16" fill="#f3eee3" class="lit flick" style="--d:9.0s;--o:6.83s"/><rect x="512" y="160" width="16" height="16" fill="#f3eee3"/><rect x="528" y="64" width="16" height="16" fill="#283060"/><rect x="528" y="80" width="16" height="16" fill="#283060"/><rect x="528" y="96" width="16" height="16" fill="#283060"/><rect x="528" y="112" width="16" height="16" fill="#283060"/><rect x="528" y="128" width="16" height="16" fill="#283060"/><rect x="528" y="144" width="16" height="16" fill="#283060"/><rect x="528" y="160" width="16" height="16" fill="#283060"/><rect x="544" y="48" width="16" height="16" fill="#ff2e7e"/><rect x="544" y="64" width="16" height="16" fill="#283060"/><rect x="544" y="80" width="16" height="16" fill="#ffc21a" class="lit flick" style="--d:4.6s;--o:8.52s"/><rect x="544" y="96" width="16" height="16" fill="#f3eee3"/><rect x="544" y="112" width="16" height="16" fill="#f3eee3" class="lit flick" style="--d:6.8s;--o:5.61s"/><rect x="544" y="128" width="16" height="16" fill="#f3eee3" class="lit nap" style="--d:17.2s;--o:8.11s"/><rect x="544" y="144" width="16" height="16" fill="#9c7a1c"/><rect x="544" y="160" width="16" height="16" fill="#f3eee3"/><rect x="560" y="64" width="16" height="16" fill="#283060"/><rect x="560" y="80" width="16" height="16" fill="#283060"/><rect x="560" y="96" width="16" height="16" fill="#283060"/><rect x="560" y="112" width="16" height="16" fill="#283060"/><rect x="560" y="128" width="16" height="16" fill="#283060"/><rect x="560" y="144" width="16" height="16" fill="#283060"/><rect x="560" y="160" width="16" height="16" fill="#283060"/><rect x="576" y="64" width="16" height="16" fill="#283060"/><rect x="576" y="80" width="16" height="16" fill="#ffc21a" class="lit nap" style="--d:17.4s;--o:6.48s"/><rect x="576" y="96" width="16" height="16" fill="#ffc21a"/><rect x="576" y="112" width="16" height="16" fill="#ffc21a" class="lit flick" style="--d:7.5s;--o:0.89s"/><rect x="576" y="128" width="16" height="16" fill="#f3eee3"/><rect x="576" y="144" width="16" height="16" fill="#9c7a1c"/><rect x="576" y="160" width="16" height="16" fill="#ffc21a"/><rect x="592" y="80" width="16" height="16" fill="#283060"/><rect x="592" y="96" width="16" height="16" fill="#283060"/><rect x="592" y="112" width="16" height="16" fill="#283060"/><rect x="592" y="128" width="16" height="16" fill="#283060"/><rect x="592" y="144" width="16" height="16" fill="#283060"/><rect x="592" y="160" width="16" height="16" fill="#283060"/><text x="552.0" y="190">05</text></g><g class="bldg" data-n="6"><title>06. we can use the pink gold ink.
+29 tool calls (8 making, 8 looking, 13 running)</title><rect x="624" y="96" width="16" height="16" fill="#343d74"/><rect x="624" y="112" width="16" height="16" fill="#343d74"/><rect x="624" y="128" width="16" height="16" fill="#343d74"/><rect x="624" y="144" width="16" height="16" fill="#343d74"/><rect x="624" y="160" width="16" height="16" fill="#343d74"/><rect x="640" y="96" width="16" height="16" fill="#ffc21a" class="lit flick" style="--d:5.7s;--o:8.18s"/><rect x="640" y="112" width="16" height="16" fill="#f3eee3" class="lit flick" style="--d:7.0s;--o:0.35s"/><rect x="640" y="128" width="16" height="16" fill="#f3eee3"/><rect x="640" y="144" width="16" height="16" fill="#9c7a1c"/><rect x="640" y="160" width="16" height="16" fill="#f3eee3"/><rect x="656" y="96" width="16" height="16" fill="#343d74"/><rect x="656" y="112" width="16" height="16" fill="#343d74"/><rect x="656" y="128" width="16" height="16" fill="#343d74"/><rect x="656" y="144" width="16" height="16" fill="#343d74"/><rect x="656" y="160" width="16" height="16" fill="#343d74"/><rect x="672" y="96" width="16" height="16" fill="#f3eee3"/><rect x="672" y="112" width="16" height="16" fill="#9c7a1c"/><rect x="672" y="128" width="16" height="16" fill="#ffc21a"/><rect x="672" y="144" width="16" height="16" fill="#9c7a1c" class="lit flick" style="--d:4.2s;--o:1.02s"/><rect x="672" y="160" width="16" height="16" fill="#f3eee3"/><rect x="688" y="96" width="16" height="16" fill="#343d74"/><rect x="688" y="112" width="16" height="16" fill="#343d74"/><rect x="688" y="128" width="16" height="16" fill="#343d74"/><rect x="688" y="144" width="16" height="16" fill="#343d74"/><rect x="688" y="160" width="16" height="16" fill="#343d74"/><text x="664.0" y="190">06</text></g><g class="bldg" data-n="7"><title>07. can you open it in my browser?
+1 tool calls (1 running)</title><rect x="720" y="160" width="16" height="16" fill="#283060"/><rect x="736" y="160" width="16" height="16" fill="#f3eee3" class="lit nap" style="--d:17.0s;--o:5.10s"/><rect x="752" y="160" width="16" height="16" fill="#283060"/><text x="744.0" y="190">07</text></g><g class="bldg" data-n="8"><title>08. right, let&#x27;s make some changes. let&#x27;s have the yellow part at the top. and then... kind of
+74 tool calls (30 making, 24 looking, 18 running, 1 outside, 1 failed)</title><rect x="848" y="80" width="16" height="16" fill="#343d74"/><rect x="848" y="96" width="16" height="16" fill="#343d74"/><rect x="848" y="112" width="16" height="16" fill="#343d74"/><rect x="848" y="128" width="16" height="16" fill="#343d74"/><rect x="848" y="144" width="16" height="16" fill="#343d74"/><rect x="848" y="160" width="16" height="16" fill="#343d74"/><rect x="864" y="64" width="16" height="16" fill="#343d74"/><rect x="864" y="80" width="16" height="16" fill="#ffc21a" class="lit nap" style="--d:12.4s;--o:5.08s"/><rect x="864" y="96" width="16" height="16" fill="#ffc21a"/><rect x="864" y="112" width="16" height="16" fill="#ffc21a"/><rect x="864" y="128" width="16" height="16" fill="#ffc21a"/><rect x="864" y="144" width="16" height="16" fill="#f3eee3" class="lit flick" style="--d:9.3s;--o:4.26s"/><rect x="864" y="160" width="16" height="16" fill="#9c7a1c"/><rect x="880" y="64" width="16" height="16" fill="#343d74"/><rect x="880" y="80" width="16" height="16" fill="#343d74"/><rect x="880" y="96" width="16" height="16" fill="#343d74"/><rect x="880" y="112" width="16" height="16" fill="#343d74"/><rect x="880" y="128" width="16" height="16" fill="#343d74"/><rect x="880" y="144" width="16" height="16" fill="#343d74"/><rect x="880" y="160" width="16" height="16" fill="#343d74"/><rect x="896" y="64" width="16" height="16" fill="#343d74"/><rect x="896" y="80" width="16" height="16" fill="#f3eee3"/><rect x="896" y="96" width="16" height="16" fill="#ff2e7e" class="lit nap" style="--d:16.8s;--o:5.13s"/><rect x="896" y="112" width="16" height="16" fill="#ffc21a"/><rect x="896" y="128" width="16" height="16" fill="#ffc21a"/><rect x="896" y="144" width="16" height="16" fill="#9c7a1c" class="lit flick" style="--d:4.7s;--o:7.81s"/><rect x="896" y="160" width="16" height="16" fill="#9c7a1c"/><rect x="912" y="64" width="16" height="16" fill="#343d74"/><rect x="912" y="80" width="16" height="16" fill="#343d74"/><rect x="912" y="96" width="16" height="16" fill="#343d74"/><rect x="912" y="112" width="16" height="16" fill="#343d74"/><rect x="912" y="128" width="16" height="16" fill="#343d74"/><rect x="912" y="144" width="16" height="16" fill="#343d74"/><rect x="912" y="160" width="16" height="16" fill="#343d74"/><rect x="928" y="64" width="16" height="16" fill="#343d74"/><rect x="928" y="80" width="16" height="16" fill="#f3eee3"/><rect x="928" y="96" width="16" height="16" fill="#9c7a1c"/><rect x="928" y="112" width="16" height="16" fill="#ffc21a"/><rect x="928" y="128" width="16" height="16" fill="#ffc21a"/><rect x="928" y="144" width="16" height="16" fill="#ffc21a" class="lit flick" style="--d:6.1s;--o:3.06s"/><rect x="928" y="160" width="16" height="16" fill="#9c7a1c"/><rect x="944" y="80" width="16" height="16" fill="#343d74"/><rect x="944" y="96" width="16" height="16" fill="#343d74"/><rect x="944" y="112" width="16" height="16" fill="#343d74"/><rect x="944" y="128" width="16" height="16" fill="#343d74"/><rect x="944" y="144" width="16" height="16" fill="#343d74"/><rect x="944" y="160" width="16" height="16" fill="#343d74"/><text x="904.0" y="190">08</text></g><g class="bldg" data-n="9"><title>09. so I don&#x27;t think the interactivity actually works, right? it can work only as an animation
+0 tool calls</title><rect x="976" y="128" width="16" height="16" fill="#ffe28c"/><rect x="976" y="144" width="16" height="16" fill="#464a60"/><rect x="976" y="160" width="16" height="16" fill="#464a60"/><text x="984.0" y="190">09</text></g><g class="bldg" data-n="10"><title>10. which is still very cool, by the way.
+0 tool calls</title><rect x="1008" y="128" width="16" height="16" fill="#ffe28c"/><rect x="1008" y="144" width="16" height="16" fill="#464a60"/><rect x="1008" y="160" width="16" height="16" fill="#464a60"/><text x="1016.0" y="190">10</text></g><g class="bldg" data-n="11"><title>11. right, do you think we have a good version to commit?
+2 tool calls (2 running)</title><rect x="1040" y="144" width="16" height="16" fill="#283060"/><rect x="1040" y="160" width="16" height="16" fill="#283060"/><rect x="1056" y="144" width="16" height="16" fill="#f3eee3"/><rect x="1056" y="160" width="16" height="16" fill="#f3eee3"/><rect x="1072" y="144" width="16" height="16" fill="#283060"/><rect x="1072" y="160" width="16" height="16" fill="#283060"/><text x="1064.0" y="190">11</text></g></svg></div>
+      <div class="now" id="now">
+        <div class="meta"><span class="clock" id="now-clock">SAT 17 OCT</span><span id="now-step">THE WHOLE SESSION</span></div>
+        <div class="lines">
+          <p class="you" id="now-you">Press replay and the session rebuilds itself: every prompt types out at the time it was sent, and its building rises as Claude works.</p>
+          <p class="claude" id="now-claude"></p>
+          <div class="meter" id="now-meter"><b>323</b> tool calls across 11 prompts</div>
+        </div>
+        <button class="play" id="play" type="button">&#9654; Replay the session</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="kit">
+    <div class="inner">
+      <div class="head">
+        <span class="label">What's in the kit</span>
+        <h2>Four tricks that survive Outlook</h2>
+        <p>Outlook has two rendering engines and strips most of what the web takes for granted. These are the
+          tricks that still get through.</p>
+      </div>
+      <div class="tricks">
+        <article class="trick">
+          <button class="shot" id="replay-chart" type="button" aria-label="Replay the chart animation">
+            <img src="img/price-index.gif" alt="A line chart of three coffee prices drawing itself" width="592" height="210">
+          </button>
+          <div class="text">
+            <h3>Charts that draw themselves</h3>
+            <p>Lines draw on, donuts sweep, bars grow. Frame 1 is the finished chart, so an Outlook that won't
+              animate still shows the numbers. Each GIF plays three times, matching the Microsoft 365 cap.</p>
+            <span class="note">Click the chart to replay it.</span>
+          </div>
+        </article>
+        <article class="trick">
+          <div class="shot"><img src="img/fig-vml.png" alt="Donut charts and a line chart as rendered by Word" width="560"></div>
+          <div class="text">
+            <h3>Vector graphics in classic Outlook</h3>
+            <p>Classic Outlook renders HTML with Word, which ignores most CSS. It still draws VML, Microsoft's
+              vector format from 1998, so donuts and line charts stay sharp there too.</p>
+            <span class="note">Shown: Word's own render of the Roast Report email.</span>
+          </div>
+        </article>
+        <article class="trick">
+          <div class="shot dark"><img src="img/lights-out-ambient.gif" alt="A night city whose windows flicker on and off" width="560"></div>
+          <div class="text">
+            <h3>Scenes that breathe</h3>
+            <p>A night tower that never quite sits still: one GIF of 24 frames, built so the last frame flows into
+              the first. A window going dark passes through an afterglow frame, so the flicker stays soft.</p>
+            <span class="note">Frame 1 is the tower at rest, which is what a non-animating Outlook shows.</span>
+          </div>
+        </article>
+        <article class="trick">
+          <div class="shot">
+            <div class="render" aria-label="The preview lab's render notes">
+              <div class="bar"><span>CLASSIC OUTLOOK · WORD ENGINE</span><span class="real">REAL</span></div>
+              <ul>
+                <li>Rendered by <em>WINWORD 16.0</em> via COM, then PDF, then PNG</li>
+                <li>MSO conditional branch active: VML shapes drawn natively by Word</li>
+                <li>3 GIFs in the classic branch: this render shows frame 1, what Outlook 2013 to 2019 shows</li>
+              </ul>
+            </div>
+          </div>
+          <div class="text">
+            <h3>See the real render before you send</h3>
+            <p>The preview lab renders the classic version with Word itself, through COM, next to simulated new
+              Outlook and the card. What you see is what classic Outlook will show, with no testing subscription.</p>
+            <span class="note">Needs Windows with Word installed.</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="inner">
+    Fictional data throughout. Prompts are lightly cleaned of filler words. The coffee roastery email and the
+    ambient tower were added the next morning, in the same conversation. Built with Claude Code, October 2026.
+    The tower comes from a Lights Out puzzle (Tiger Electronics, 1995).
+  </div>
+</footer>
+
+<template id="mail-roast"><style>
+  body { margin:0; padding:0; }
+  table { border-collapse:collapse; }
+  img { border:0; display:block; }
+  @media (max-width:640px) { .wrap { width:100% !important; } }
+</style><div class="mailbody" style="margin:0;padding:0;background:#f3f3f1;">
+<div style="display:none;max-height:0;overflow:hidden;mso-hide:all;">Roasters at 82.4% of capacity, up 3.1pt. Two lots sell out before the next harvest.</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f3f3f1" style="background:#f3f3f1;">
+<tr><td align="center" style="padding:24px 0;">
+<table role="presentation" class="wrap" width="640" cellpadding="0" cellspacing="0" border="0" bgcolor="#f3f3f1" style="width:640px;background:#f3f3f1;">
+<tr><td bgcolor="#f3f3f1" style="background:#f3f3f1;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f3f3f1" style="width:100%;background:#f3f3f1;">
+<tr><td bgcolor="#0D0D0F" style="background:#0D0D0F;padding:22px 24px 20px;"><table role="presentation" width="592" cellpadding="0" cellspacing="0" border="0"><tr><td valign="top" style="font-family:'Segoe UI',Arial,sans-serif;"><p style="margin:0;font-size:11px;letter-spacing:2px;font-weight:bold;color:#FFC21A;mso-line-height-rule:exactly;line-height:16px;">ROAST REPORT</p><p style="margin:4px 0 0;font-size:12px;color:#a9a8a3;mso-line-height-rule:exactly;line-height:16px;">Week 42 &middot; 17 Oct 2026</p></td><td align="right" valign="middle"><img src="img/roast-glyph.png" width="168" height="40" alt="" style="display:block;border:0;"></td></tr></table><p class="display" style="margin:16px 0 0;font-family:'Segoe UI',Arial,sans-serif;font-size:23px;font-weight:bold;color:#ffffff;mso-line-height-rule:exactly;line-height:30px;">Roasters at 82.4% of capacity, up 3.1pt. Two lots sell out before the next harvest.</p></td></tr><tr><td height="5" bgcolor="#FFC21A" style="height:5px;background:#FFC21A;font-size:5px;mso-line-height-rule:exactly;line-height:5px;">&nbsp;</td></tr><tr><td height="24" style="height:24px;font-size:24px;mso-line-height-rule:exactly;line-height:24px;">&nbsp;</td></tr><tr><td style="padding:0 16px;"><table role="presentation" width="608" cellpadding="0" cellspacing="0" border="0"><tr><td width="197" valign="top" style="width:197px;padding:0 8px;font-family:'Segoe UI',Arial,sans-serif;"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td valign="middle"><img src="img/donut-capacity.gif" width="76" height="76" alt="Roaster capacity used 82.4%" style="display:block;border:0;"></td><td valign="middle" style="padding-left:10px;font-family:'Segoe UI',Arial,sans-serif;"><p style="margin:0;font-size:12px;color:#52514e;mso-line-height-rule:exactly;line-height:16px;">Capacity used</p><p style="margin:2px 0 0;font-size:22px;font-weight:bold;color:#0b0b0b;mso-line-height-rule:exactly;line-height:28px;">82.4%</p><p style="margin:0;font-size:12px;mso-line-height-rule:exactly;line-height:16px;"><span style="color:#006300;">&#9650; 3.1pt</span> <span style="color:#898781;">w/w</span></p></td></tr></table></td><td width="197" valign="top" style="width:197px;padding:0 8px;font-family:'Segoe UI',Arial,sans-serif;"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td valign="middle"><img src="img/donut-repeat.gif" width="76" height="76" alt="Repeat customers 71.8%" style="display:block;border:0;"></td><td valign="middle" style="padding-left:10px;font-family:'Segoe UI',Arial,sans-serif;"><p style="margin:0;font-size:12px;color:#52514e;mso-line-height-rule:exactly;line-height:16px;">Repeat customers</p><p style="margin:2px 0 0;font-size:22px;font-weight:bold;color:#0b0b0b;mso-line-height-rule:exactly;line-height:28px;">71.8%</p><p style="margin:0;font-size:12px;mso-line-height-rule:exactly;line-height:16px;"><span style="color:#b42828;">&#9660; 0.4pt</span> <span style="color:#898781;">w/w</span></p></td></tr></table></td><td width="197" valign="top" style="width:197px;padding:0 8px;font-family:'Segoe UI',Arial,sans-serif;"><p style="margin:0;font-size:12px;color:#52514e;mso-line-height-rule:exactly;line-height:16px;">Stock cover</p><p style="margin:6px 0 0;font-size:34px;font-weight:bold;color:#0b0b0b;mso-line-height-rule:exactly;line-height:40px;">5.5<span style="font-size:16px;"> wks</span></p><p style="margin:2px 0 0;font-size:12px;mso-line-height-rule:exactly;line-height:16px;"><span style="color:#52514e;">&#9660; 0.42</span> <span style="color:#898781;">vs last week</span></p></td></tr></table></td></tr><tr><td height="28" style="height:28px;font-size:28px;mso-line-height-rule:exactly;line-height:28px;">&nbsp;</td></tr><tr><td style="padding:0 24px;font-family:'Segoe UI',Arial,sans-serif;"><p style="margin:0;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#898781;mso-line-height-rule:exactly;line-height:16px;">Market</p><p class="display" style="margin:2px 0 0;font-family:'Segoe UI',Arial,sans-serif;font-size:18px;font-weight:bold;color:#0b0b0b;mso-line-height-rule:exactly;line-height:24px;">Green coffee prices by origin, Oct 25 = 100</p></td></tr><tr><td height="10" style="height:10px;font-size:10px;mso-line-height-rule:exactly;line-height:10px;">&nbsp;</td></tr><tr><td style="padding:0 24px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td width="12" height="12" bgcolor="#2a78d6" style="width:12px;height:12px;background:#2a78d6;font-size:1px;line-height:1px;">&nbsp;</td><td style="font-family:'Segoe UI',Arial,sans-serif;font-size:12px;color:#52514e;padding:0 14px 0 6px;">Ethiopia</td><td width="12" height="12" bgcolor="#eb6834" style="width:12px;height:12px;background:#eb6834;font-size:1px;line-height:1px;">&nbsp;</td><td style="font-family:'Segoe UI',Arial,sans-serif;font-size:12px;color:#52514e;padding:0 14px 0 6px;">Colombia</td><td width="12" height="12" bgcolor="#1baf7a" style="width:12px;height:12px;background:#1baf7a;font-size:1px;line-height:1px;">&nbsp;</td><td style="font-family:'Segoe UI',Arial,sans-serif;font-size:12px;color:#52514e;padding:0 14px 0 6px;">Brazil</td></tr></table><div style="height:8px;line-height:8px;font-size:8px;">&nbsp;</div><img src="img/price-index.gif" width="592" height="210" alt="Ethiopia 108.4; Colombia 101.2; Brazil 96.8" style="display:block;border:0;width:100%;max-width:592px;height:auto;"></td></tr><tr><td height="28" style="height:28px;font-size:28px;mso-line-height-rule:exactly;line-height:28px;">&nbsp;</td></tr><tr><td style="padding:0 24px;font-family:'Segoe UI',Arial,sans-serif;"><p style="margin:0;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#898781;mso-line-height-rule:exactly;line-height:16px;">Roasting</p><p class="display" style="margin:2px 0 0;font-family:'Segoe UI',Arial,sans-serif;font-size:18px;font-weight:bold;color:#0b0b0b;mso-line-height-rule:exactly;line-height:24px;">When the beans go out: next 8 weeks</p></td></tr><tr><td height="10" style="height:10px;font-size:10px;mso-line-height-rule:exactly;line-height:10px;">&nbsp;</td></tr><tr><td style="padding:0 22px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" width="538" style="width:538px;"><tr><td width="138" style="width:138px;"></td><td width="50" style="width:50px;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#898781;padding-bottom:4px;">W43</td><td width="50" style="width:50px;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#898781;padding-bottom:4px;">W44</td><td width="50" style="width:50px;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#898781;padding-bottom:4px;">W45</td><td width="50" style="width:50px;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#898781;padding-bottom:4px;">W46</td><td width="50" style="width:50px;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#898781;padding-bottom:4px;">W47</td><td width="50" style="width:50px;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#898781;padding-bottom:4px;">W48</td><td width="50" style="width:50px;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#898781;padding-bottom:4px;">W49</td><td width="50" style="width:50px;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#898781;padding-bottom:4px;">W50</td></tr><tr><td width="138" style="width:138px;font-family:'Segoe UI',Arial,sans-serif;font-size:12px;color:#0b0b0b;mso-line-height-rule:exactly;line-height:15px;padding-right:6px;">Konga<br><span style="font-size:10px;color:#898781;">Ethiopia &middot; 120 kg</span></td><td width="50" height="26" bgcolor="#cde2fb" style="width:50px;height:26px;background:#cde2fb;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#0b0b0b;font-weight:bold;">4</td><td width="50" height="26" bgcolor="#1c5cab" style="width:50px;height:26px;background:#1c5cab;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#ffffff;font-weight:bold;">38</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#9ec5f4" style="width:50px;height:26px;background:#9ec5f4;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#0b0b0b;font-weight:bold;">9</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#9ec5f4" style="width:50px;height:26px;background:#9ec5f4;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#0b0b0b;font-weight:bold;">5</td></tr><tr><td width="138" style="width:138px;font-family:'Segoe UI',Arial,sans-serif;font-size:12px;color:#0b0b0b;mso-line-height-rule:exactly;line-height:15px;padding-right:6px;">Sidamo Guji<br><span style="font-size:10px;color:#898781;">Ethiopia &middot; 75 kg</span></td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#0d366b" style="width:50px;height:26px;background:#0d366b;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#ffffff;font-weight:bold;">41</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#9ec5f4" style="width:50px;height:26px;background:#9ec5f4;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#0b0b0b;font-weight:bold;">7</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td></tr><tr><td width="138" style="width:138px;font-family:'Segoe UI',Arial,sans-serif;font-size:12px;color:#0b0b0b;mso-line-height-rule:exactly;line-height:15px;padding-right:6px;">Huila Pink Bourbon<br><span style="font-size:10px;color:#898781;">Colombia &middot; 90 kg</span></td><td width="50" height="26" bgcolor="#9ec5f4" style="width:50px;height:26px;background:#9ec5f4;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#0b0b0b;font-weight:bold;">6</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#3987e5" style="width:50px;height:26px;background:#3987e5;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#0b0b0b;font-weight:bold;">27</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#6da7ec" style="width:50px;height:26px;background:#6da7ec;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#0b0b0b;font-weight:bold;">15</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td></tr><tr><td width="138" style="width:138px;font-family:'Segoe UI',Arial,sans-serif;font-size:12px;color:#0b0b0b;mso-line-height-rule:exactly;line-height:15px;padding-right:6px;">Cerrado Mineiro<br><span style="font-size:10px;color:#898781;">Brazil &middot; 300 kg</span></td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#9ec5f4" style="width:50px;height:26px;background:#9ec5f4;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#0b0b0b;font-weight:bold;">8</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#6da7ec" style="width:50px;height:26px;background:#6da7ec;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#0b0b0b;font-weight:bold;">14</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td></tr><tr><td width="138" style="width:138px;font-family:'Segoe UI',Arial,sans-serif;font-size:12px;color:#0b0b0b;mso-line-height-rule:exactly;line-height:15px;padding-right:6px;">Nyeri AA<br><span style="font-size:10px;color:#898781;">Kenya &middot; 50 kg</span></td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#cde2fb" style="width:50px;height:26px;background:#cde2fb;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#0b0b0b;font-weight:bold;">3</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td></tr><tr><td width="138" style="width:138px;font-family:'Segoe UI',Arial,sans-serif;font-size:12px;color:#0b0b0b;mso-line-height-rule:exactly;line-height:15px;padding-right:6px;">Tarrazú<br><span style="font-size:10px;color:#898781;">Costa Rica &middot; 110 kg</span></td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#6da7ec" style="width:50px;height:26px;background:#6da7ec;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#0b0b0b;font-weight:bold;">11</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#3987e5" style="width:50px;height:26px;background:#3987e5;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#0b0b0b;font-weight:bold;">22</td></tr><tr><td width="138" style="width:138px;font-family:'Segoe UI',Arial,sans-serif;font-size:12px;color:#0b0b0b;mso-line-height-rule:exactly;line-height:15px;padding-right:6px;">Antigua<br><span style="font-size:10px;color:#898781;">Guatemala &middot; 140 kg</span></td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#9ec5f4" style="width:50px;height:26px;background:#9ec5f4;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#0b0b0b;font-weight:bold;">9</td></tr><tr><td width="138" style="width:138px;font-family:'Segoe UI',Arial,sans-serif;font-size:12px;color:#0b0b0b;mso-line-height-rule:exactly;line-height:15px;padding-right:6px;">Kayanza<br><span style="font-size:10px;color:#898781;">Burundi &middot; 60 kg</span></td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#9ec5f4" style="width:50px;height:26px;background:#9ec5f4;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#0b0b0b;font-weight:bold;">6</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td><td width="50" height="26" bgcolor="#6da7ec" style="width:50px;height:26px;background:#6da7ec;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#0b0b0b;font-weight:bold;">12</td><td width="50" height="26" bgcolor="#e9e8e3" style="width:50px;height:26px;background:#e9e8e3;border:2px solid #f3f3f1;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;mso-line-height-rule:exactly;line-height:14px;text-align:center;color:#c3c2b7;">&middot;</td></tr></table><table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:10px;"><tr><td style="font-family:'Segoe UI',Arial,sans-serif;font-size:10px;color:#898781;padding-right:8px;">Share of lot stock booked to ship:</td><td width="14" height="12" bgcolor="#cde2fb" style="width:14px;height:12px;background:#cde2fb;font-size:1px;line-height:1px;">&nbsp;</td><td style="font-family:'Segoe UI',Arial,sans-serif;font-size:10px;color:#52514e;padding:0 10px 0 4px;">1&ndash;4%</td><td width="14" height="12" bgcolor="#9ec5f4" style="width:14px;height:12px;background:#9ec5f4;font-size:1px;line-height:1px;">&nbsp;</td><td style="font-family:'Segoe UI',Arial,sans-serif;font-size:10px;color:#52514e;padding:0 10px 0 4px;">5&ndash;9%</td><td width="14" height="12" bgcolor="#6da7ec" style="width:14px;height:12px;background:#6da7ec;font-size:1px;line-height:1px;">&nbsp;</td><td style="font-family:'Segoe UI',Arial,sans-serif;font-size:10px;color:#52514e;padding:0 10px 0 4px;">10&ndash;19%</td><td width="14" height="12" bgcolor="#3987e5" style="width:14px;height:12px;background:#3987e5;font-size:1px;line-height:1px;">&nbsp;</td><td style="font-family:'Segoe UI',Arial,sans-serif;font-size:10px;color:#52514e;padding:0 10px 0 4px;">20&ndash;29%</td><td width="14" height="12" bgcolor="#1c5cab" style="width:14px;height:12px;background:#1c5cab;font-size:1px;line-height:1px;">&nbsp;</td><td style="font-family:'Segoe UI',Arial,sans-serif;font-size:10px;color:#52514e;padding:0 10px 0 4px;">30&ndash;39%</td><td width="14" height="12" bgcolor="#0d366b" style="width:14px;height:12px;background:#0d366b;font-size:1px;line-height:1px;">&nbsp;</td><td style="font-family:'Segoe UI',Arial,sans-serif;font-size:10px;color:#52514e;padding:0 10px 0 4px;">40+%</td></tr></table></td></tr><tr><td height="28" style="height:28px;font-size:28px;mso-line-height-rule:exactly;line-height:28px;">&nbsp;</td></tr><tr><td style="padding:0 24px;font-family:'Segoe UI',Arial,sans-serif;"><p style="margin:0;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#898781;mso-line-height-rule:exactly;line-height:16px;">Watchlist</p><p class="display" style="margin:2px 0 0;font-family:'Segoe UI',Arial,sans-serif;font-size:18px;font-weight:bold;color:#0b0b0b;mso-line-height-rule:exactly;line-height:24px;">Three lots need attention</p></td></tr><tr><td height="6" style="height:6px;font-size:6px;mso-line-height-rule:exactly;line-height:6px;">&nbsp;</td></tr><tr><td style="padding:0 24px;"><table role="presentation" width="592" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding:12px 0;border-top:1px solid #e1e0d9;font-family:'Segoe UI',Arial,sans-serif;"><table role="presentation" width="592" cellpadding="0" cellspacing="0" border="0"><tr><td width="96" valign="top" style="width:96px;font-family:'Segoe UI',Arial,sans-serif;font-size:12px;mso-line-height-rule:exactly;line-height:18px;"><span style="color:#d03b3b;font-size:13px;">&#10006;</span> <b style="color:#0b0b0b;">Critical</b></td><td valign="top" style="font-family:'Segoe UI',Arial,sans-serif;"><p style="margin:0;font-size:14px;font-weight:bold;color:#0b0b0b;mso-line-height-rule:exactly;line-height:18px;">Konga <span style="font-weight:normal;color:#898781;font-size:12px;">Ethiopia &middot; Washed</span></p><p style="margin:3px 0 0;font-size:13px;color:#52514e;mso-line-height-rule:exactly;line-height:18px;">38% of the stock ships in W44. The next container lands in December.</p></td><td width="130" valign="top" align="right" style="width:130px;font-family:'Segoe UI',Arial,sans-serif;"><p style="margin:0;mso-line-height-rule:exactly;line-height:18px;"><span style="font-family:Consolas,Menlo,'Courier New',monospace;font-size:14px;color:#898781;">██▇▆▆▅▄▃▃▂▂▁</span></p><p style="margin:2px 0 0;font-size:11px;color:#898781;">stock left 12w &middot; <b style="color:#0b0b0b;">38%</b></p></td></tr></table></td></tr><tr><td style="padding:12px 0;border-top:1px solid #e1e0d9;font-family:'Segoe UI',Arial,sans-serif;"><table role="presentation" width="592" cellpadding="0" cellspacing="0" border="0"><tr><td width="96" valign="top" style="width:96px;font-family:'Segoe UI',Arial,sans-serif;font-size:12px;mso-line-height-rule:exactly;line-height:18px;"><span style="color:#ec835a;font-size:13px;">&#9650;</span> <b style="color:#0b0b0b;">Serious</b></td><td valign="top" style="font-family:'Segoe UI',Arial,sans-serif;"><p style="margin:0;font-size:14px;font-weight:bold;color:#0b0b0b;mso-line-height-rule:exactly;line-height:18px;">Sidamo Guji <span style="font-weight:normal;color:#898781;font-size:12px;">Ethiopia &middot; Natural</span></p><p style="margin:3px 0 0;font-size:13px;color:#52514e;mso-line-height-rule:exactly;line-height:18px;">41% ships in W44 with one subscription run. Sells out before the new harvest.</p></td><td width="130" valign="top" align="right" style="width:130px;font-family:'Segoe UI',Arial,sans-serif;"><p style="margin:0;mso-line-height-rule:exactly;line-height:18px;"><span style="font-family:Consolas,Menlo,'Courier New',monospace;font-size:14px;color:#898781;">██▇▇▆▅▅▄▃▂▂▁</span></p><p style="margin:2px 0 0;font-size:11px;color:#898781;">stock left 12w &middot; <b style="color:#0b0b0b;">52%</b></p></td></tr></table></td></tr><tr><td style="padding:12px 0;border-top:1px solid #e1e0d9;font-family:'Segoe UI',Arial,sans-serif;"><table role="presentation" width="592" cellpadding="0" cellspacing="0" border="0"><tr><td width="96" valign="top" style="width:96px;font-family:'Segoe UI',Arial,sans-serif;font-size:12px;mso-line-height-rule:exactly;line-height:18px;"><span style="color:#fab219;font-size:13px;">&#9679;</span> <b style="color:#0b0b0b;">Watch</b></td><td valign="top" style="font-family:'Segoe UI',Arial,sans-serif;"><p style="margin:0;font-size:14px;font-weight:bold;color:#0b0b0b;mso-line-height-rule:exactly;line-height:18px;">Huila Pink Bourbon <span style="font-weight:normal;color:#898781;font-size:12px;">Colombia &middot; Washed</span></p><p style="margin:3px 0 0;font-size:13px;color:#52514e;mso-line-height-rule:exactly;line-height:18px;">Roaster 2 is down for service. 27% of this lot&#x27;s orders wait for W45.</p></td><td width="130" valign="top" align="right" style="width:130px;font-family:'Segoe UI',Arial,sans-serif;"><p style="margin:0;mso-line-height-rule:exactly;line-height:18px;"><span style="font-family:Consolas,Menlo,'Courier New',monospace;font-size:14px;color:#898781;">██▇▇▆▅▄▄▃▂▂▁</span></p><p style="margin:2px 0 0;font-size:11px;color:#898781;">stock left 12w &middot; <b style="color:#0b0b0b;">61%</b></p></td></tr></table></td></tr></table></td></tr><tr><td height="20" style="height:20px;font-size:20px;mso-line-height-rule:exactly;line-height:20px;">&nbsp;</td></tr><tr><td style="padding:0 24px;"><a href="https://example.com/roast" style="display:inline-block;background:#FFC21A;color:#0D0D0F;font-family:'Segoe UI',Arial,sans-serif;font-size:15px;font-weight:bold;text-decoration:none;padding:12px 22px;border-radius:6px;">Open the roast dashboard &rarr;</a><p style="margin:14px 0 0;font-family:'Segoe UI',Arial,sans-serif;font-size:12px;color:#52514e;">Or <a href="mailto:roast@example.com?subject=FLAG%20Konga%20-%20Week%2042&amp;body=Action%3A%20reorder" style="color:#0b0b0b;">flag a lot by reply</a>. A flow parses the subject line.</p></td></tr><tr><td height="28" style="height:28px;font-size:28px;mso-line-height-rule:exactly;line-height:28px;">&nbsp;</td></tr><tr><td bgcolor="#0D0D0F" style="background:#0D0D0F;padding:16px 24px;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;color:#a9a8a3;mso-line-height-rule:exactly;line-height:16px;"><span style="color:#FFC21A;">&#9632;</span> You are seeing the <b style="color:#fff;">HTML</b> build: charts are PNG/GIF. M365 Outlook can also show an interactive card.<br>Fictional roastery, fictional data. Built with the outlook-email kit.</td></tr>
+</table>
+</td></tr>
+</table>
+</td></tr>
+</table>
+</div></template>
+<template id="mail-tower"><style>
+  body { margin:0; padding:0; }
+  table { border-collapse:collapse; }
+  img { border:0; display:block; }
+  @media (max-width:640px) { .wrap { width:100% !important; } }
+</style><div class="mailbody" style="margin:0;padding:0;background:#F3EEE3;">
+<div style="display:none;max-height:0;overflow:hidden;mso-hide:all;">The night shift at No. 25: one GIF on a soft loop.</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#FFC21A" style="background:#FFC21A;"><tr><td align="center" bgcolor="#FFC21A" style="background:#FFC21A;"><table role="presentation" class="wrap" width="640" cellpadding="0" cellspacing="0" border="0" style="width:640px;"><tr><td style="padding:28px 24px 30px;font-family:Georgia,'Times New Roman',serif;"><p class="mono" style="margin:0;font-family:Consolas,'Courier New',monospace;font-size:12px;letter-spacing:1.8px;color:#0D0D0F;mso-line-height-rule:exactly;line-height:18px;">AFTER HOURS / NO. 25 WINDOW STREET</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td valign="bottom"><p class="display" style="margin:16px 0 14px;font-family:Georgia,'Times New Roman',serif;font-size:56px;font-weight:normal;letter-spacing:-2.5px;color:#0D0D0F;mso-line-height-rule:exactly;line-height:56px;">Put the tower<br>to bed.</p></td><td class="mono" align="right" valign="middle" aria-hidden="true" style="font-family:Consolas,'Courier New',monospace;font-size:72px;font-weight:bold;color:#FF2E7E;mso-line-height-rule:exactly;line-height:72px;">25</td></tr></table><p style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:18px;color:#0D0D0F;mso-line-height-rule:exactly;line-height:27px;">The night shift at No. 25: windows flicker on and off in a soft loop while the beacon keeps time. One animated GIF and no script, in every modern Outlook.</p><p class="mono" style="margin:14px 0 0;font-family:Consolas,'Courier New',monospace;font-size:12px;color:#0D0D0F;mso-line-height-rule:exactly;line-height:18px;">Animated GIF &middot; loops where the client allows &middot; Outlook 2013 to 2019 shows frame 1</p></td></tr></table></td></tr><tr><td height="3" bgcolor="#0D0D0F" style="height:3px;background:#0D0D0F;font-size:3px;mso-line-height-rule:exactly;line-height:3px;">&nbsp;</td></tr></table><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#F3EEE3" style="background:#F3EEE3;">
+<tr><td align="center" style="padding:0 0 24px;">
+<table role="presentation" class="wrap" width="640" cellpadding="0" cellspacing="0" border="0" bgcolor="#F3EEE3" style="width:640px;background:#F3EEE3;">
+<tr><td bgcolor="#F3EEE3" style="background:#F3EEE3;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#F3EEE3" style="width:100%;background:#F3EEE3;">
+<tr><td style="padding:0;"><img src="img/lights-out-ambient.gif" width="640" height="320" alt="Animated: a city at night. Windows in a tower and the buildings around it flicker on and off." style="display:block;border:0;"></td></tr><tr><td height="36" style="height:36px;font-size:36px;mso-line-height-rule:exactly;line-height:36px;">&nbsp;</td></tr><tr><td style="padding:0 24px;font-family:Georgia,'Times New Roman',serif;"><p class="display" style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:27px;font-weight:bold;letter-spacing:-0.6px;color:#0D0D0F;mso-line-height-rule:exactly;line-height:32px;">How it moves</p><p style="margin:6px 0 0;font-family:Georgia,'Times New Roman',serif;font-size:15px;color:#4B4942;mso-line-height-rule:exactly;line-height:22px;">One GIF on a loop.</p></td></tr><tr><td height="16" style="height:16px;font-size:16px;mso-line-height-rule:exactly;line-height:16px;">&nbsp;</td></tr><tr><td style="padding:0 24px;"><table role="presentation" width="592" cellpadding="0" cellspacing="0" border="0" style="width:592px;"><tr><td width="4" bgcolor="#FFC21A" style="width:4px;background:#FFC21A;font-size:1px;">&nbsp;</td><td style="padding:2px 0 2px 20px;"><p style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:18px;color:#0D0D0F;mso-line-height-rule:exactly;line-height:27px;">Every few seconds a window goes dark, a neighbour wakes up and the beacon on the mast keeps time. It is one animated GIF, 24 frames that loop without a seam, so it plays in new Outlook, Outlook on the web, mobile and Outlook for Microsoft 365. Outlook 2013 to 2019 shows the first frame: the tower at rest.</p></td></tr></table></td></tr><tr><td height="30" style="height:30px;font-size:30px;mso-line-height-rule:exactly;line-height:30px;">&nbsp;</td></tr><tr><td style="padding:0 24px;"><table role="presentation" width="592" cellpadding="0" cellspacing="0" border="0" style="width:592px;"><tr><td width="148" valign="top" style="width:148px;font-family:Georgia,'Times New Roman',serif;"><p class="mono" style="margin:0;font-family:Consolas,'Courier New',monospace;font-size:30px;font-weight:bold;color:#0D0D0F;mso-line-height-rule:exactly;line-height:36px;">24</p><p style="margin:2px 8px 0 0;font-size:12px;color:#4B4942;mso-line-height-rule:exactly;line-height:16px;">frames, one seamless loop</p></td><td width="148" valign="top" style="width:148px;font-family:Georgia,'Times New Roman',serif;"><p class="mono" style="margin:0;font-family:Consolas,'Courier New',monospace;font-size:30px;font-weight:bold;color:#0D0D0F;mso-line-height-rule:exactly;line-height:36px;">6 s</p><p style="margin:2px 8px 0 0;font-size:12px;color:#4B4942;mso-line-height-rule:exactly;line-height:16px;">per loop</p></td><td width="148" valign="top" style="width:148px;font-family:Georgia,'Times New Roman',serif;"><p class="mono" style="margin:0;font-family:Consolas,'Courier New',monospace;font-size:30px;font-weight:bold;color:#0D0D0F;mso-line-height-rule:exactly;line-height:36px;">340 KB</p><p style="margin:2px 8px 0 0;font-size:12px;color:#4B4942;mso-line-height-rule:exactly;line-height:16px;">the whole animation</p></td><td width="148" valign="top" style="width:148px;font-family:Georgia,'Times New Roman',serif;"><p class="mono" style="margin:0;font-family:Consolas,'Courier New',monospace;font-size:30px;font-weight:bold;color:#0D0D0F;mso-line-height-rule:exactly;line-height:36px;">0</p><p style="margin:2px 8px 0 0;font-size:12px;color:#4B4942;mso-line-height-rule:exactly;line-height:16px;">lines of script</p></td></tr></table></td></tr><tr><td height="32" style="height:32px;font-size:32px;mso-line-height-rule:exactly;line-height:32px;">&nbsp;</td></tr><tr><td style="padding:0 24px;"><table role="presentation" width="592" cellpadding="0" cellspacing="0" border="0" style="width:592px;"><tr><td height="1" bgcolor="#0D0D0F" style="height:1px;background:#0D0D0F;font-size:1px;mso-line-height-rule:exactly;line-height:1px;">&nbsp;</td></tr><tr><td class="mono" style="padding:16px 0 0;font-family:Consolas,'Courier New',monospace;font-size:11px;color:#5D574A;mso-line-height-rule:exactly;line-height:18px;">Fictional tower. Built with the outlook-email kit.</td></tr></table></td></tr><tr><td height="28" style="height:28px;font-size:28px;mso-line-height-rule:exactly;line-height:28px;">&nbsp;</td></tr>
+</table>
+</td></tr>
+</table>
+</td></tr>
+</table>
+</div></template>
+
+<script>
+(() => {
+  const mails = {
+    roast: { subj: "Week 42: roasters at 82.4% of capacity", from: "Roast Report <roast@example.com> · to you" },
+    tower: { subj: "Put the tower to bed.", from: "No. 25 Window Street <tower@example.com> · to you" },
+  };
+  const host = document.getElementById("mailview");
+  const root = host.attachShadow({ mode: "open" });
+  let current = "roast";
+
+  function fit() {
+    const body = root.querySelector(".mailbody");
+    if (!body) return;
+    body.style.zoom = "";
+    const natural = 680;
+    const scale = Math.min(1, (host.clientWidth - 2) / natural);
+    body.style.zoom = scale < 1 ? scale.toFixed(3) : "";
+  }
+
+  function restartGifs(scope) {
+    const stamp = Date.now();
+    scope.querySelectorAll('img[src*=".gif"]').forEach((img) => {
+      img.src = img.getAttribute("src").split("?")[0] + "?r=" + stamp;
+    });
+  }
+
+  function show(name) {
+    current = name;
+    root.innerHTML = document.getElementById("mail-" + name).innerHTML;
+    restartGifs(root);
+    host.scrollTop = 0;
+    document.getElementById("r-subj").textContent = mails[name].subj;
+    document.getElementById("r-from").textContent = mails[name].from;
+    document.querySelectorAll(".msg").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.mail === name)));
+    fit();
+  }
+
+  document.querySelectorAll(".msg").forEach((b) => b.addEventListener("click", () => show(b.dataset.mail)));
+  document.getElementById("replay").addEventListener("click", () => restartGifs(root));
+  document.getElementById("replay-chart").addEventListener("click", (e) => restartGifs(e.currentTarget));
+  new ResizeObserver(fit).observe(host);
+  show(current);
+
+  // Hovering a building lights it up.
+  function mark(n, on) {
+    document.querySelectorAll('[data-n="' + n + '"]').forEach((el) => el.classList.toggle("hl", on));
+  }
+  document.querySelectorAll(".bldg").forEach((el) => {
+    el.addEventListener("mouseenter", () => mark(el.dataset.n, true));
+    el.addEventListener("mouseleave", () => mark(el.dataset.n, false));
+  });
+})();
+
+// Replay: the city clears, then each prompt types out and its building rises as the tool calls tick up.
+// The page at rest is the finished state; Stop (or the end) returns to it.
+(() => {
+  const turns = [{"n": 1, "time": "Sat 11:55", "prompt": "let's try to find the most creative way to use HTML that is accessible or showable in standard Office Microsoft 365 email communication, right? so we have MSG blank canvas, basically. it has severe restrictions, right? you cannot have JavaScript there, but you have some limited tools. if you want to display any kind of cool visuals or to have any kind of interactivity or any kind of graphics, basically, what is possible, right?", "did": "Mapped the two engines. Classic Outlook renders with Word; new Outlook, the web and mobile run Chromium behind Microsoft's sanitizer. Ranked the toolkit: Adaptive Cards for interaction, VML for vector graphics, GIFs for motion.", "calls": 4, "min": 2, "river": false}, {"n": 2, "time": "Sat 12:08", "prompt": "you can create like simulated MSG environments, right? so you can have like an HTML container that has only the tools that are available. and you can just try to build something interesting.", "did": "Built the preview lab: one email in three panes. The classic pane is Word itself rendering the email; the others simulate new Outlook's sanitizer and the card renderer. First email: a weekly KPI digest on fictional data.", "calls": 60, "min": 18, "river": false}, {"n": 3, "time": "Sat 12:43", "prompt": "wow, these look amazing. I'm interested in this GIF idea. does that actually work? because that's a way to have kind of animated charts, right? basically. is that or does that not work? because in the real version, I don't see it moving. I don't know. but in any case, please save this to a reusable asset and skill.", "did": "Checked where GIFs play and where they freeze on frame 1, then redesigned the charts so frame 1 is the finished chart. Packaged everything as a reusable skill.", "calls": 60, "min": 19, "river": false}, {"n": 4, "time": "Sat 13:23", "prompt": "yeah, you can commit and push.", "did": "Committed the kit.", "calls": 12, "min": 3, "river": false}, {"n": 5, "time": "Sat 14:21", "prompt": "let's have another shot at it. go blind and try to produce something really creative.", "did": "Built Lights Out, a 5×5 puzzle as an Adaptive Card riding inside the email, with no script and no server. It plays in Microsoft's card renderer; a real inbox also needs Actionable Messages switched on.", "calls": 81, "min": 34, "river": true}, {"n": 6, "time": "Sat 14:55", "prompt": "we can use the pink gold ink.", "did": "Re-skinned the game in the gold, pink and ink palette, and fixed the hairlines Word drew between table rows on a coloured card.", "calls": 29, "min": 9, "river": false}, {"n": 7, "time": "Sat 15:31", "prompt": "can you open it in my browser?", "did": "Opened the lab.", "calls": 1, "min": 0, "river": false}, {"n": 8, "time": "Sat 16:35", "prompt": "right, let's make some changes. let's have the yellow part at the top. and then... kind of one of white main page. or maybe dark mode? I don't know. let's try both. oh, I think we have saved one of the outputs as a template. right, look around.", "did": "Found the template, rebuilt the email with a full-width gold masthead, and made light and dark versions. Tested in Word that the big headline doesn't clip.", "calls": 74, "min": 17, "river": true}, {"n": 9, "time": "Sat 16:57", "prompt": "so I don't think the interactivity actually works, right? it can work only as an animation.", "did": "Partly right. The puzzle plays only in Outlook with a work account where Actionable Messages are switched on. Everywhere else the animated email shows, and that is the part that holds up.", "calls": 0, "min": 1, "river": false}, {"n": 10, "time": "Sat 16:58", "prompt": "which is still very cool, by the way.", "did": "Agreed. The animated charts are what will land at work, with none of the card setup.", "calls": 0, "min": 0, "river": false}, {"n": 11, "time": "Sat 16:58", "prompt": "right, do you think we have a good version to commit?", "did": "Committed and pushed.", "calls": 2, "min": 0, "river": false}];
+  const sky = document.getElementById("sky");
+  const play = document.getElementById("play");
+  const el = (id) => document.getElementById(id);
+  const rest = { clock: el("now-clock").textContent, step: el("now-step").textContent,
+                 you: el("now-you").textContent, meter: el("now-meter").innerHTML };
+  const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let run = 0;
+  const wait = (ms, id) => new Promise((ok, no) => setTimeout(() => (id === run ? ok() : no()), calm ? 0 : ms));
+
+  function finish() {
+    run += 1;
+    sky.classList.remove("replaying");
+    sky.querySelectorAll(".on").forEach((n) => n.classList.remove("on"));
+    el("now-clock").textContent = rest.clock;
+    el("now-step").textContent = rest.step;
+    el("now-you").textContent = rest.you;
+    el("now-claude").textContent = "";
+    el("now-meter").innerHTML = rest.meter;
+    play.innerHTML = "&#9654; Replay the session";
+  }
+
+  async function start() {
+    const id = ++run;
+    play.innerHTML = "&#9632; Stop";
+    sky.classList.add("replaying");
+    sky.querySelectorAll(".on").forEach((n) => n.classList.remove("on"));
+    let total = 0;
+    try {
+      for (const t of turns) {
+        if (t.river) {
+          sky.querySelectorAll('.riv[data-n="' + t.n + '"]').forEach((r) => r.classList.add("on"));
+          el("now-step").textContent = "CONTEXT COMPACTED";
+          el("now-you").textContent = "";
+          el("now-claude").textContent = "The conversation carries on from a summary.";
+          await wait(1100, id);
+        }
+        el("now-clock").textContent = t.time.toUpperCase();
+        el("now-step").textContent = "PROMPT " + String(t.n).padStart(2, "0") + " OF " + turns.length;
+        el("now-claude").textContent = "";
+        el("now-meter").innerHTML = "<b>" + total.toLocaleString("en-GB") + "</b> tool calls so far";
+        const you = el("now-you");
+        const step = 16;   // ms per character at a steady pace, so a long prompt takes visibly longer to type
+        for (let i = 1; i <= t.prompt.length; i += 2) {
+          you.innerHTML = "";
+          you.append(t.prompt.slice(0, i));
+          const caret = document.createElement("span");
+          caret.className = "caret";
+          you.append(caret);
+          await wait(step * 2, id);
+        }
+        you.textContent = t.prompt;
+        await wait(400 + t.prompt.length * 6, id);   // time to read it back before the building rises
+        const bldg = sky.querySelector('.bldg[data-n="' + t.n + '"]');
+        bldg.querySelector("text").classList.add("on");
+        const rects = [...bldg.querySelectorAll("rect")].sort(
+          (a, b) => b.y.baseVal.value - a.y.baseVal.value || a.x.baseVal.value - b.x.baseVal.value);
+        const span = Math.min(2600, 500 + t.calls * 30);
+        for (let i = 0; i < rects.length; i++) {
+          rects[i].classList.add("on");
+          const shown = Math.round(t.calls * (i + 1) / rects.length);
+          el("now-meter").innerHTML = "<b>" + (total + shown).toLocaleString("en-GB") + "</b> tool calls so far"
+            + (t.min ? " &middot; " + t.min + " min on this prompt" : "");
+          await wait(span / rects.length, id);
+        }
+        total += t.calls;
+        el("now-claude").textContent = t.did;
+        await wait(1400 + t.did.length * 12, id);
+      }
+      el("now-step").textContent = "DONE";
+      el("now-you").textContent = "";
+      el("now-claude").textContent = "Committed and pushed. The kit was ready for the work PC.";
+      await wait(2600, id);
+      finish();
+    } catch (stopped) {
+      /* a newer run or Stop took over */
+    }
+  }
+
+  play.addEventListener("click", () => (play.textContent.includes("Stop") ? finish() : start()));
+})();
+</script>
+
+</body>
+</html>

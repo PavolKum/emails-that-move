@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+<meta charset="utf-8">
+<!--[if gte mso 9]><xml><o:OfficeDocumentSettings><o:AllowPNG/><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml><![endif]-->
+<style>
+  .hoverme:hover { background:#FF2E7E; }
+</style>
+</head>
+<body style="margin:0;padding:0;background:#ffffff;">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" align="center" style="width:600px;font-family:Arial,sans-serif;">
+  <tr><td style="padding:12px;font-size:16px;font-weight:bold;">1. Conditional comments</td></tr>
+  <tr><td style="padding:0 12px 12px;">
+    <!--[if mso]><span style="color:#0a7d2c;font-weight:bold;">MSO branch rendered (Word engine)</span><![endif]-->
+    <!--[if !mso]><!--><span style="color:#c00;font-weight:bold;">Non-MSO branch rendered (browser engine)</span><!--<![endif]-->
+  </td></tr>
+
+  <tr><td style="padding:12px;font-size:16px;font-weight:bold;">2. VML gradient rect with textbox</td></tr>
+  <tr><td style="padding:0 12px 12px;">
+    <!--[if mso]>
+    <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:560px;height:60px;">
+      <v:fill type="gradient" color="#FFC21A" color2="#FF2E7E" angle="90"/>
+      <v:textbox inset="12px,12px,12px,12px"><span style="font-family:Arial;font-size:20px;color:#0D0D0F;font-weight:bold;">VML gradient</span></v:textbox>
+    </v:rect>
+    <![endif]-->
+  </td></tr>
+
+  <tr><td style="padding:12px;font-size:16px;font-weight:bold;">3. VML arc (donut segment) + oval</td></tr>
+  <tr><td style="padding:0 12px 12px;">
+    <!--[if mso]>
+    <v:group xmlns:v="urn:schemas-microsoft-com:vml" coordsize="200,200" coordorigin="0,0" style="width:150px;height:150px;">
+      <v:oval style="position:absolute;left:10;top:10;width:180;height:180;" filled="f" strokecolor="#E6E6E6" strokeweight="14pt"/>
+      <v:arc style="position:absolute;left:10;top:10;width:180;height:180;" startangle="0" endangle="300" filled="f" strokecolor="#FF2E7E" strokeweight="14pt"/>
+    </v:group>
+    <![endif]-->
+  </td></tr>
+
+  <tr><td style="padding:12px;font-size:16px;font-weight:bold;">4. VML shape path (ae angle-ellipse)</td></tr>
+  <tr><td style="padding:0 12px 12px;">
+    <!--[if mso]>
+    <v:shape xmlns:v="urn:schemas-microsoft-com:vml" coordsize="200,200" style="width:150px;height:150px;" filled="t" fillcolor="#FFC21A" stroked="f"
+      path="m 100,100 ae 100,100,90,90,0,11796480 x e"/>
+    <![endif]-->
+  </td></tr>
+
+  <tr><td style="padding:12px;font-size:16px;font-weight:bold;">5. Bulletproof VML button</td></tr>
+  <tr><td style="padding:0 12px 12px;">
+    <!--[if mso]>
+    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" href="https://example.com" style="height:44px;v-text-anchor:middle;width:220px;" arcsize="25%" fillcolor="#0D0D0F" stroke="f">
+      <center style="color:#FFC21A;font-family:Arial;font-size:15px;font-weight:bold;">Open dashboard</center>
+    </v:roundrect>
+    <![endif]-->
+  </td></tr>
+
+  <tr><td style="padding:12px;font-size:16px;font-weight:bold;">6. Table-cell bars + unicode sparkline</td></tr>
+  <tr><td style="padding:0 12px 12px;">
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="300"><tr>
+      <td width="210" height="14" bgcolor="#FF2E7E" style="font-size:0;line-height:0;">&nbsp;</td>
+      <td width="90" height="14" bgcolor="#EEEEEE" style="font-size:0;line-height:0;">&nbsp;</td>
+    </tr></table>
+    <p style="font-size:18px;margin:8px 0 0;">Rent: &#9601;&#9602;&#9603;&#9605;&#9606;&#9607;&#9608; +4.2%</p>
+  </td></tr>
+
+  <tr><td class="hoverme" style="padding:12px;font-size:16px;font-weight:bold;">7. CSS :hover (should do nothing in Word)</td></tr>
+  <tr><td style="padding:12px;font-size:16px;font-weight:bold;background:linear-gradient(90deg,#FFC21A,#FF2E7E);background-color:#dddddd;">8. CSS gradient (Word should show grey fallback)</td></tr>
+  <tr><td style="padding:12px;font-size:16px;font-weight:bold;border-radius:12px;background:#0D0D0F;color:#fff;">9. border-radius (Word should show square)</td></tr>
+</table>
+</body>
+</html>

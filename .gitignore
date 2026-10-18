@@ -1,0 +1,5 @@
+# Private brand themes (your own or a client's) stay on your machine. Copy them across by hand.
+assets/themes/local/*.json
+__pycache__/
+outlook-email-out/
+work/

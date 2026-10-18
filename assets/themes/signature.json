@@ -1,0 +1,38 @@
+{
+  "name": "signature",
+  "notes": "Gold / pink / ink, a poster look. For loud pieces: posters, launches, games. Gold card, ink type; pink is the one hot accent and goes on light grounds only (callout strips, cut lines, hero highlights), gold is the accent on dark grounds. night/night_deep are the hero's two-tone night ground (flat fills, no gradient). Text contrast (WCAG): ink on gold 12.0, secondary on gold 8.0, muted on gold 5.4, on_ink_muted on ink 7.3; pink on gold is 2.2, so never pink text on the card. Display type: Inter Tight is not installed, so Arial Black (the 2080 fallback); mono labels in Consolas. Chart tokens are the default palette, validated on white, NOT on gold: use the default theme for data emails.",
+  "font": "'Segoe UI',Arial,sans-serif",
+  "font_display": "'Inter Tight','Arial Black',sans-serif",
+  "font_mso": "'Segoe UI',Arial,sans-serif",
+  "font_display_mso": "'Arial Black',Arial,sans-serif",
+  "raster_fonts": {"regular": "segoeui.ttf", "semibold": "seguisb.ttf", "display": "ariblk.ttf", "mono": "consolab.ttf"},
+  "chrome": {
+    "ink": "#0D0D0F",
+    "accent": "#FFC21A",
+    "on_accent": "#0D0D0F",
+    "pop": "#FF2E7E",
+    "night": "#11162B",
+    "night_deep": "#090C1A",
+    "page": "#0D0D0F",
+    "card": "#FFC21A",
+    "on_ink": "#F3EEE3",
+    "on_ink_muted": "#A39E94"
+  },
+  "text": {
+    "primary": "#0D0D0F",
+    "secondary": "#3A3016",
+    "muted": "#5A4A14",
+    "good": "#14532D",
+    "bad": "#8E1B2E"
+  },
+  "chart": {
+    "grid": "#E89B00",
+    "axis": "#3A3016",
+    "empty_cell": "#F3EEE3",
+    "track": "#E89B00",
+    "series": ["#2a78d6", "#eb6834", "#1baf7a"],
+    "single": "#2a78d6",
+    "sequential": ["#cde2fb", "#9ec5f4", "#6da7ec", "#3987e5", "#1c5cab", "#0d366b"]
+  },
+  "status": {"critical": "#d03b3b", "serious": "#ec835a", "warning": "#fab219"}
+}

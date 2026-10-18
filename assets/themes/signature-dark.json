@@ -1,0 +1,43 @@
+{
+  "name": "signature-dark",
+  "notes": "Gold / pink / ink in a masthead layout, dark page: the same full-bleed gold masthead and 3 px ink rule, then an ink page with cream type (the palette's rhythm: gold ground with ink type, ink ground with cream type and gold accents). Raised surfaces (code box, rule chips, notes) are night #11162B; lines are a warm grey. Pink is the masthead numeral only plus the hero's press ring and caption. Contrast on ink: cream 16.8, secondary 11.7, muted 7.3, gold 12.0; on night: gold 11.1, muted 6.7. Chart tokens are the default palette, validated on white, NOT on ink: use the default theme for data emails.",
+  "font": "Georgia,'Times New Roman',serif",
+  "font_display": "Georgia,'Times New Roman',serif",
+  "font_mso": "Georgia,'Times New Roman',serif",
+  "font_display_mso": "Georgia,'Times New Roman',serif",
+  "raster_fonts": {"regular": "georgia.ttf", "semibold": "georgiab.ttf", "display": "georgia.ttf", "mono": "consolab.ttf"},
+  "chrome": {
+    "ink": "#0D0D0F",
+    "accent": "#FFC21A",
+    "on_accent": "#0D0D0F",
+    "pop": "#FF2E7E",
+    "night": "#11162B",
+    "night_deep": "#090C1A",
+    "masthead": "#FFC21A",
+    "on_masthead": "#0D0D0F",
+    "page": "#0D0D0F",
+    "card": "#0D0D0F",
+    "panel": "#11162B",
+    "box": "#11162B",
+    "line": "#66625A",
+    "on_ink": "#F3EEE3",
+    "on_ink_muted": "#A39E94"
+  },
+  "text": {
+    "primary": "#F3EEE3",
+    "secondary": "#CFC8BA",
+    "muted": "#A39E94",
+    "good": "#6FCF97",
+    "bad": "#FF8A9A"
+  },
+  "chart": {
+    "grid": "#2A2926",
+    "axis": "#66625A",
+    "empty_cell": "#11162B",
+    "track": "#2A2926",
+    "series": ["#2a78d6", "#eb6834", "#1baf7a"],
+    "single": "#2a78d6",
+    "sequential": ["#cde2fb", "#9ec5f4", "#6da7ec", "#3987e5", "#1c5cab", "#0d366b"]
+  },
+  "status": {"critical": "#d03b3b", "serious": "#ec835a", "warning": "#fab219"}
+}

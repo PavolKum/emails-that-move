@@ -1,0 +1,43 @@
+{
+  "name": "signature-light",
+  "notes": "Gold / pink / ink in a masthead layout: a full-bleed gold masthead closed by a 3 px ink rule, then a cream page. Georgia for headlines and body, Consolas for labels and numbers (Georgia's old-style digits bounce). Pink is the masthead numeral only (display size; pink on gold 2.2, pink on cream 3.05) plus the hero's press ring and caption; accents on the cream page are gold, lines are ink. Contrast on cream: ink 16.8, secondary 7.8, muted 6.2. Chart tokens are the default palette, validated on white, not cream: use the default theme for data emails.",
+  "font": "Georgia,'Times New Roman',serif",
+  "font_display": "Georgia,'Times New Roman',serif",
+  "font_mso": "Georgia,'Times New Roman',serif",
+  "font_display_mso": "Georgia,'Times New Roman',serif",
+  "raster_fonts": {"regular": "georgia.ttf", "semibold": "georgiab.ttf", "display": "georgia.ttf", "mono": "consolab.ttf"},
+  "chrome": {
+    "ink": "#0D0D0F",
+    "accent": "#FFC21A",
+    "on_accent": "#0D0D0F",
+    "pop": "#FF2E7E",
+    "night": "#11162B",
+    "night_deep": "#090C1A",
+    "masthead": "#FFC21A",
+    "on_masthead": "#0D0D0F",
+    "page": "#F3EEE3",
+    "card": "#F3EEE3",
+    "panel": "#0D0D0F",
+    "box": "#FAF7EF",
+    "line": "#0D0D0F",
+    "on_ink": "#F3EEE3",
+    "on_ink_muted": "#A39E94"
+  },
+  "text": {
+    "primary": "#0D0D0F",
+    "secondary": "#4B4942",
+    "muted": "#5D574A",
+    "good": "#14532D",
+    "bad": "#8E1B2E"
+  },
+  "chart": {
+    "grid": "#DDD6C8",
+    "axis": "#B9B2A3",
+    "empty_cell": "#FAF7EF",
+    "track": "#DDD6C8",
+    "series": ["#2a78d6", "#eb6834", "#1baf7a"],
+    "single": "#2a78d6",
+    "sequential": ["#cde2fb", "#9ec5f4", "#6da7ec", "#3987e5", "#1c5cab", "#0d366b"]
+  },
+  "status": {"critical": "#d03b3b", "serious": "#ec835a", "warning": "#fab219"}
+}
