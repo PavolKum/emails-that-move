@@ -3,6 +3,8 @@
 **Emails that move.** Animated charts, vector graphics and scenes that breathe, all inside the Outlook inbox, the
 strictest canvas in office software. There is no JavaScript in the emails.
 
+**See it working:** https://pavolkum.github.io/outlook-email-kit/ (both emails in a simulated Outlook window, plus a replay of how the kit was built)
+
 ![A line chart of three coffee prices drawing itself](docs/img/price-index.gif)
 
 ## What you get
