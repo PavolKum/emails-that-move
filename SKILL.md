@@ -22,6 +22,7 @@ S=~/.claude/skills/outlook-email          # or wherever this skill lives
 python $S/examples/roast.py --theme flat --out work/emails          # scaffold: copy this file for a new email
 python $S/examples/gif_gallery.py --theme default --out work/emails # animated-chart test email
 python $S/examples/lights_out.py --theme default --out work/emails  # a playable puzzle card (+ lite control, + ambient loop)
+python $S/examples/decode_letter.py --text letter.txt --out work/decode  # a whole letter as one GIF: gold rain, lines decoding
 python $S/scripts/build_lab.py work/emails        # Word-renders every *.html, writes work/lab.html (+ vendor/)
 python $S/scripts/verify_lab.py work/lab.html     # headless: every pane, card parse warnings, screenshots
 python $S/scripts/send_outlook.py work/emails/roast.html          # dry run
@@ -53,6 +54,27 @@ Blocks: `donut_block`, `line_chart_block` (+ `LineChart`), `bar_chart_block` (+ 
 - **The GIF starts when the email opens, not when it scrolls into view.** Put the animated chart high, or rely on the 3 loops.
 - The lab's classic pane is a static export: it shows frame 1 by design and flags GIFs in the classic branch. Use the new-Outlook pane's Replay button to watch the motion.
 - Keep GIFs under ~150 KB: few colours, short sequences. Count-up numbers cost the most bytes.
+
+## A letter that decodes (the whole email is one GIF)
+
+`examples/decode_letter.py`: the Signature decode effect from the workbench FX pane, as an email. Gold katakana
+rain falls; the message scrambles in pink and locks line by line into gold; it ends on the readable letter.
+Built 2026-11-01 for fun internal mails.
+
+- **Frame 1 is the finished letter**, so Outlook 2013-2019 and animation-off clients still show the whole message.
+  It plays 3 times (the M365 cap) and stops on the letter.
+- **Your text:** `--text letter.txt`, one line per row, up to 90 characters a line (900 x 500 canvas; the canvas
+  grows taller for more lines). Uppercase reads best in this style.
+- **Bytes, measured:** rain changes about a third of the image every frame, so this breaks the ~150 KB rule on
+  purpose. A 9-line letter is ~2.5 MB at 1x and ~9 MB with `--scale 2`. Fewer colours, 10 fps or coarser trails
+  save only 10-25%. Fine for colleagues; do not send it in bulk.
+- **Image-only email:** the full message is in the alt text, but nothing can be searched or copied, and external
+  recipients see nothing until they download pictures. For anyone outside the company, add the words as text below.
+- **Width:** 900 px is wider than the usual 600-640; narrower reading panes scale it down, letters included.
+- **Sending:** `scripts/send_outlook.py work/decode/decode_letter.html --send` mails it to yourself (inline, as
+  CID). Forward it from Outlook to the colleague.
+- Every build reads the GIF back as a client composes it and stops on any wrong pixel (it caught a palette bug
+  on day one).
 
 ## Hard-won rules (each one bit us)
 
@@ -109,6 +131,7 @@ Blocks: `donut_block`, `line_chart_block` (+ `LineChart`), `bar_chart_block` (+ 
 | `examples/roast.py` | Reference email on a fictional coffee roastery: VML + GIF + heatmap + full Adaptive Card. Writes static and animated variants |
 | `scripts/make_flat_theme.py` | Writes `assets/themes/flat.json` from the default theme |
 | `examples/gif_gallery.py` | GIF test email: line draw-on, donut sweep, bar grow + count-up, a static control, a "why frozen" checklist |
+| `examples/decode_letter.py` | A letter that decodes: the whole email is one GIF of gold rain with the message decoding line by line; frame 1 is the finished letter; `--text`, `--scale 2` |
 | `examples/probe.html` | Capability probe: which technique renders where |
 | `examples/lights_out.py` | Lights Out in an Actionable Message: 3 levels, live hint map, floor moons, animated hero GIF. Also writes a lite control card (19 KB vs 46 KB) to tell a size limit from a feature gap. With a masthead theme the gold band carries the title and the hero drops its baked-in text. Also writes `lights-out-ambient.html`: no card, the tower on a seamless 24-frame loop with softly flickering windows, the honest version for inboxes without Actionable Messages |
 | `examples/lights_out_test.py` | Its play test: JSON simulator (3000 random clicks, invariants) + the real renderer in a built lab |
